@@ -28,8 +28,8 @@ The `validate-examples` workflow runs on every pull request and verifies every e
 JSON schema, and asserts that the deliberately-invalid fixtures under `tests/negative/` are rejected.
 It is a **required check**: a pull request cannot be merged until it passes.
 
-Documentation is published automatically from `main` to
-<https://bitol-io.github.io/open-maturity-model-standard/>.
+Documentation lives in `docs/` and is built with mkdocs. No documentation site is published yet: OMMS
+is a private repository on a GitHub Free organisation, where Pages is unavailable.
 
 ## Adding or changing a maturity model
 

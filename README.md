@@ -26,9 +26,9 @@ existing data workflows.
 
 > ## WORK IN PROGRESS — NOT READY FOR PRODUCTION
 >
-> OMMS is a **draft standard**, published early so the community can see it and shape it. It is **not** a
-> released standard. Expect **breaking changes in every version until v1.0.0**, and incomplete areas. Do
-> not build production systems against it.
+> OMMS is a **draft standard**, circulated within the Bitol TSC so it can be shaped before release. It is
+> **not** a released standard. Expect **breaking changes in every version until v1.0.0**, and incomplete
+> areas. Do not build production systems against it.
 
 ## Design goals
 
@@ -49,8 +49,8 @@ existing data workflows.
 The JSON Schema lives in [`schema/`](https://github.com/bitol-io/open-maturity-model-standard/tree/main/schema).
 Files using the `.omms.yaml` extension are auto-detected as OMMS.
 
-A reader-friendly version of the standard is published at
-<https://bitol-io.github.io/open-maturity-model-standard/>.
+The documentation is built with mkdocs from [`docs/`](docs/README.md). No documentation site is
+published yet: OMMS is a private repository on a GitHub Free organisation, where Pages is unavailable.
 
 ## Example
 
