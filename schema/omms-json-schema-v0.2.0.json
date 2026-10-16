@@ -1,0 +1,583 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "$id": "https://github.com/bitol-io/open-maturity-model-standard/blob/main/schema/omms-json-schema-v0.2.0.json",
+  "title": "Open Maturity Model Standard (OMMS)",
+  "description": "The Open Maturity Model Standard (OMMS): a YAML syntax for defining maturity models that evaluate Bitol artifacts such as data contracts (ODCS) and data products (ODPS). A maturity model expresses policies, levels and criteria; it does not prescribe level names, level count, or specific criteria.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "kind",
+    "apiVersion",
+    "id",
+    "status",
+    "levels"
+  ],
+  "properties": {
+    "kind": {
+      "type": "string",
+      "const": "MaturityModel",
+      "description": "The type of OMMS object. For OMMS, always `MaturityModel`."
+    },
+    "apiVersion": {
+      "type": "string",
+      "default": "v0.2.0",
+      "description": "Version of the OMMS schema used. Indicates the version of the standard, e.g., `v0.2.0`."
+    },
+    "id": {
+      "type": "string",
+      "description": "A unique identifier (could be a UUID) identifying this maturity model."
+    },
+    "name": {
+      "type": "string",
+      "description": "Name of the maturity model. Optional, but recommended for human-readable identification."
+    },
+    "version": {
+      "type": "string",
+      "description": "Current version of the maturity model itself (SemVer). This is independent of the OMMS `apiVersion`: a model may iterate through several of its own versions while the OMMS syntax it uses stays the same."
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "proposed",
+        "draft",
+        "active",
+        "deprecated",
+        "retired"
+      ],
+      "description": "Lifecycle status of the maturity model. `proposed` and `draft` are works in progress, `active` is fit for evaluation, and `deprecated` and `retired` are on their way out. Models commonly turn this into a policy that caps the achievable maturity level."
+    },
+    "description": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Object describing the maturity model for humans: what it is for, what it does not cover, and how to apply it.",
+      "properties": {
+        "purpose": {
+          "type": "string",
+          "description": "Intended purpose of the maturity model."
+        },
+        "limitations": {
+          "type": "string",
+          "description": "Known limitations, including the target standard version the criteria were designed for and what that means for artifacts on other editions."
+        },
+        "usage": {
+          "type": "string",
+          "description": "How to use the model: the order in which policies, levels and criteria are evaluated, and what a qualifying artifact must satisfy."
+        }
+      }
+    },
+    "tags": {
+      "$ref": "#/$defs/Tags"
+    },
+    "targetApplication": {
+      "type": "string",
+      "description": "The standard this model evaluates, e.g., `ODCS` or `ODPS`.",
+      "examples": [
+        "ODCS",
+        "ODPS"
+      ]
+    },
+    "targetApiVersion": {
+      "type": "string",
+      "description": "Version of the target standard the criteria were written against, e.g., `v3.2.0`. Used by criteria whose threshold is the special value `latest`.",
+      "examples": [
+        "v3.2.0",
+        "v1.1.0"
+      ]
+    },
+    "customProperties": {
+      "$ref": "#/$defs/CustomProperties"
+    },
+    "authoritativeDefinitions": {
+      "$ref": "#/$defs/AuthoritativeDefinitions"
+    },
+    "policies": {
+      "type": "array",
+      "description": "List of policies, evaluated before any level criteria. Policies express organizational rules that override or constrain the criteria evaluation.",
+      "items": {
+        "$ref": "#/$defs/Policy"
+      }
+    },
+    "levels": {
+      "type": "array",
+      "minItems": 1,
+      "description": "List of maturity levels. Levels are cumulative: an artifact must satisfy all criteria of a level and of every lower level to qualify for it.",
+      "items": {
+        "$ref": "#/$defs/Level"
+      }
+    }
+  },
+  "$defs": {
+    "Tags": {
+      "type": "array",
+      "description": "A list of tags that may be assigned to the model, a policy, a level or a criterion. Tags may be used to better categorize an element. For example, `finance`, `sensitive`, `ai-ready`.",
+      "examples": [
+        "maturity-model",
+        "odcs",
+        "ai-ready"
+      ],
+      "items": {
+        "type": "string"
+      }
+    },
+    "CustomProperty": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "property",
+        "value"
+      ],
+      "properties": {
+        "property": {
+          "type": "string",
+          "description": "The name of the key. Names should be in camel case—the same as if they were permanent properties in the standard."
+        },
+        "value": {
+          "description": "The value of the key."
+        },
+        "description": {
+          "type": "string",
+          "description": "Optional description of the custom property."
+        },
+        "id": {
+          "type": "string",
+          "description": "Optional unique identifier for the custom property, for stable references."
+        },
+        "vendor": {
+          "type": "string",
+          "description": "Identifies the vendor, provider, or external system associated with this custom property. SHOULD be a stable, lowercase identifier matching ^[a-z0-9][a-z0-9-]*$ (e.g. confluent, zeenea, atlan, soda). Tools MUST preserve unknown vendor values.",
+          "examples": [
+            "confluent",
+            "zeenea",
+            "atlan",
+            "soda"
+          ]
+        }
+      }
+    },
+    "CustomProperties": {
+      "type": "array",
+      "description": "A list of key/value pairs for custom properties, using the shared Bitol structure.",
+      "items": {
+        "$ref": "#/$defs/CustomProperty"
+      }
+    },
+    "AuthoritativeDefinition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "url",
+        "type"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Optional unique identifier for the authoritative definition, for stable references."
+        },
+        "url": {
+          "type": "string",
+          "description": "URL to the authority."
+        },
+        "type": {
+          "type": "string",
+          "description": "Type of definition for authority. See the recommended values in the documentation.",
+          "examples": [
+            "businessDefinition",
+            "canonicalUrl",
+            "glossary",
+            "implementation",
+            "ontology",
+            "taxonomy",
+            "transformationImplementation",
+            "tutorial",
+            "videoTutorial"
+          ]
+        },
+        "description": {
+          "type": "string",
+          "description": "Description of the authoritative definition for humans."
+        }
+      }
+    },
+    "AuthoritativeDefinitions": {
+      "type": "array",
+      "description": "List of links to sources that provide more details on the maturity model: an article describing the model, a canonical URL, a glossary, or the target standard's repository. Authoritative definitions follow the same structure across the Bitol standards.",
+      "items": {
+        "$ref": "#/$defs/AuthoritativeDefinition"
+      }
+    },
+    "Where": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Filter applied to the items collected by the criterion before counting them. At least one of `field`, `in` or `isNotNull` is expected.",
+      "properties": {
+        "field": {
+          "type": "string",
+          "description": "The field of each collected item to test, e.g. `type`, `status`, `content`, or a nested path such as `team.members[].dateOut`."
+        },
+        "in": {
+          "type": "array",
+          "description": "The item is kept when the value of `field` is one of these values.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "isNotNull": {
+          "type": "boolean",
+          "description": "When `true`, the item is kept only if the value of `field` is present and not null."
+        }
+      }
+    },
+    "Arguments": {
+      "type": "object",
+      "description": "Parameters for the metric, aligning with the ODCS data quality vocabulary. The known keys are listed here; additional metric-specific parameters are permitted.",
+      "properties": {
+        "having": {
+          "description": "Items must have these fields present. A single field name or a list of them.",
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          ]
+        },
+        "anyOf": {
+          "type": "array",
+          "description": "Items must have at least one of these fields present.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "where": {
+          "$ref": "#/$defs/Where"
+        },
+        "distinct": {
+          "type": "boolean",
+          "description": "Count unique values only."
+        },
+        "relatesTo": {
+          "type": "string",
+          "description": "Dependency reference. Bracket notation (`[DataContract]`, `[DataProduct]`) resolves against a linked artifact of that kind; a plain path resolves within the document being evaluated."
+        },
+        "validValues": {
+          "type": "array",
+          "description": "Restrict to values in this list.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "caps": {
+          "type": "object",
+          "description": "Maps `property` values to the maximum achievable maturity level, e.g. `{ active: 5, retired: 0 }`. Used by policies to express a status cap; evaluated before all level criteria.",
+          "additionalProperties": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "contractIdMustMatch": {
+          "type": "string",
+          "description": "Property path whose value the referencing `contractId` must equal, e.g. `product.id`. Used by the self-sourcing convention."
+        },
+        "versionMustMatch": {
+          "type": "string",
+          "description": "Property path whose value the referencing `version` must equal, e.g. `product.version`. Used by the self-sourcing convention."
+        }
+      }
+    },
+    "Policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "property"
+      ],
+      "description": "A rule evaluated before any level criteria. Policies express organizational decisions that override or constrain criteria evaluation — capping the maximum achievable level, enforcing conventions, or defining validation rules that apply globally.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier. Suggested format: POL-{X}{nn}, where {X} identifies the target artifact (`C` for a contract, `P` for a product). Policy IDs are only unique within their model."
+        },
+        "name": {
+          "type": "string",
+          "description": "Machine-friendly name, e.g. `statusCap` or `selfSourcing`."
+        },
+        "property": {
+          "type": "string",
+          "description": "YAML property path to evaluate, e.g. `status` or `inputPorts`."
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "library",
+            "text"
+          ],
+          "default": "library",
+          "description": "`library` means machine-evaluable, `text` means auto-pass. Default is `library`."
+        },
+        "metric": {
+          "type": "string",
+          "enum": [
+            "rowCount",
+            "nullValues",
+            "invalidValues",
+            "validValues"
+          ],
+          "description": "Metric name, from the same vocabulary the criteria use."
+        },
+        "arguments": {
+          "$ref": "#/$defs/Arguments"
+        },
+        "description": {
+          "type": "string",
+          "description": "Human-readable explanation of the policy and its intent."
+        },
+        "tags": {
+          "$ref": "#/$defs/Tags"
+        },
+        "authoritativeDefinitions": {
+          "$ref": "#/$defs/AuthoritativeDefinitions"
+        },
+        "customProperties": {
+          "$ref": "#/$defs/CustomProperties"
+        },
+        "mustBe": {
+          "description": "Threshold operator, as on a criterion."
+        },
+        "mustNotBe": {
+          "description": "Threshold operator, as on a criterion."
+        },
+        "mustBeGreaterThan": {
+          "description": "Threshold operator, as on a criterion."
+        },
+        "mustBeGreaterOrEqualTo": {
+          "description": "Threshold operator, as on a criterion."
+        },
+        "mustBeLessThan": {
+          "description": "Threshold operator, as on a criterion."
+        },
+        "mustBeLessOrEqualTo": {
+          "description": "Threshold operator, as on a criterion."
+        },
+        "mustBeBetween": {
+          "description": "Threshold operator, as on a criterion."
+        },
+        "mustNotBeBetween": {
+          "description": "Threshold operator, as on a criterion."
+        }
+      }
+    },
+    "Level": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "level",
+        "name",
+        "description",
+        "criteria"
+      ],
+      "description": "A step in the maturity progression. The standard does not prescribe level names, level count, or ordering conventions: each maturity model makes those decisions independently.",
+      "properties": {
+        "level": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Level number (1, 2, 3…)."
+        },
+        "name": {
+          "type": "string",
+          "description": "Human-readable name, e.g. `Structural` or `AI-Ready`.",
+          "examples": [
+            "Structural",
+            "Descriptive",
+            "Governed",
+            "AI-Ready",
+            "Optimized"
+          ]
+        },
+        "description": {
+          "type": "string",
+          "description": "What this level means. This could be displayed to the end-user. Be cognizant of the verbiage."
+        },
+        "criteria": {
+          "type": "array",
+          "minItems": 1,
+          "description": "List of criteria for this level. All of them must pass for an artifact to qualify for the level.",
+          "items": {
+            "$ref": "#/$defs/Criterion"
+          }
+        },
+        "tags": {
+          "$ref": "#/$defs/Tags"
+        },
+        "authoritativeDefinitions": {
+          "$ref": "#/$defs/AuthoritativeDefinitions"
+        },
+        "customProperties": {
+          "$ref": "#/$defs/CustomProperties"
+        }
+      }
+    },
+    "Criterion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "property"
+      ],
+      "description": "A measurable check within a level, expressed in the ODCS data quality vocabulary: a property path, a metric, optional arguments, and a threshold operator.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^L[0-9]+-[A-Z][0-9]+$",
+          "description": "Unique identifier. Format: L{n}-{X}{nn}, where {n} is the level number, {X} identifies the target artifact (`C` for a contract, `P` for a product), and {nn} is a zero-padded sequence within that level."
+        },
+        "property": {
+          "type": "string",
+          "description": "YAML property path to evaluate. Array steps use bracket notation, e.g. `schema[].properties[].description` or `outputPorts[]`.",
+          "examples": [
+            "kind",
+            "description.purpose",
+            "schema[].properties[].description",
+            "outputPorts[].contractId"
+          ]
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "library",
+            "text"
+          ],
+          "default": "library",
+          "description": "`library` means machine-evaluable; `text` means auto-pass — the criterion documents an expectation that an evaluator does not resolve on its own, and it scores as met. Default is `library`."
+        },
+        "metric": {
+          "type": "string",
+          "enum": [
+            "rowCount",
+            "nullValues",
+            "invalidValues",
+            "validValues"
+          ],
+          "description": "Metric name. Required when `type` is `library`. OMMS reuses the ODCS library metrics and introduces none of its own."
+        },
+        "arguments": {
+          "$ref": "#/$defs/Arguments"
+        },
+        "unit": {
+          "type": "string",
+          "enum": [
+            "rows",
+            "percent"
+          ],
+          "description": "Unit of the measured value: `rows` is a count of items, `percent` is a percentage between 0 and 100."
+        },
+        "description": {
+          "type": "string",
+          "description": "Human-readable explanation of the criterion, and of what a passing artifact looks like."
+        },
+        "validValues": {
+          "type": "array",
+          "description": "Restrict to values in this list. Tolerated at criterion level for compatibility with existing models; RFC-0037 places `validValues` inside `arguments`. See issues.md.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "tags": {
+          "$ref": "#/$defs/Tags"
+        },
+        "authoritativeDefinitions": {
+          "$ref": "#/$defs/AuthoritativeDefinitions"
+        },
+        "customProperties": {
+          "$ref": "#/$defs/CustomProperties"
+        },
+        "mustBe": {
+          "description": "Threshold operator: exact match. The special value `latest` instructs the evaluator to resolve to the current version of the `targetApplication` standard.",
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        },
+        "mustNotBe": {
+          "description": "Threshold operator: must not equal.",
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        },
+        "mustBeGreaterThan": {
+          "description": "Threshold operator: strict lower bound. Accepts a version string such as `v3.1.0`, compared as a version, as well as a number.",
+          "type": [
+            "number",
+            "string"
+          ]
+        },
+        "mustBeGreaterOrEqualTo": {
+          "description": "Threshold operator: inclusive lower bound. Accepts a version string such as `v3.1.0`, compared as a version, as well as a number.",
+          "type": [
+            "number",
+            "string"
+          ]
+        },
+        "mustBeLessThan": {
+          "description": "Threshold operator: strict upper bound. Accepts a version string, as well as a number.",
+          "type": [
+            "number",
+            "string"
+          ]
+        },
+        "mustBeLessOrEqualTo": {
+          "description": "Threshold operator: inclusive upper bound. Accepts a version string, as well as a number.",
+          "type": [
+            "number",
+            "string"
+          ]
+        },
+        "mustBeBetween": {
+          "type": "array",
+          "description": "Threshold operator: inclusive range [min, max]. Smallest value first.",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": {
+            "type": "number"
+          }
+        },
+        "mustNotBeBetween": {
+          "type": "array",
+          "description": "Threshold operator: exclusive range [min, max]. Smallest value first.",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": {
+            "type": "number"
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "not": {
+              "properties": {
+                "type": {
+                  "const": "text"
+                }
+              },
+              "required": [
+                "type"
+              ]
+            }
+          },
+          "then": {
+            "required": [
+              "metric"
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

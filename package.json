@@ -1,0 +1,31 @@
+{
+  "name": "open-maturity-model-standard",
+  "version": "0.2.0",
+  "description": "Open Maturity Model Standard (OMMS) - A standard for defining maturity models that evaluate Bitol artifacts",
+  "main": "schema/omms-json-schema-v0.2.0.json",
+  "scripts": {
+    "validate": "./scripts/validate-examples.sh",
+    "test": "./scripts/validate-examples.sh"
+  },
+  "keywords": [
+    "maturity-model",
+    "json-schema",
+    "validation",
+    "omms",
+    "odcs",
+    "odps",
+    "open-data"
+  ],
+  "author": "Bitol.io",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bitol-io/open-maturity-model-standard.git"
+  },
+  "devDependencies": {
+    "ajv-cli": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

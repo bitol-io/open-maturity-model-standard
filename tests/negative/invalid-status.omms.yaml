@@ -1,0 +1,24 @@
+# Copyright 2026 The Bitol Contributors
+# SPDX-License-Identifier: Apache-2.0
+#
+# NEGATIVE TEST - this document MUST fail schema validation.
+# Violation: `status` must be one of `proposed`, `draft`, `active`,
+# `deprecated`, `retired`. See docs/fundamentals.md#status-values.
+
+kind: MaturityModel
+apiVersion: v0.2.0
+id: 3c4d5e6f-7a8b-4c3d-ae4f-5a6b7c8d9e0f
+name: invalid-status
+status: obsolete
+
+levels:
+  - level: 1
+    name: Basic
+    description: Minimum valid artifact.
+    criteria:
+      - id: L1-C01
+        property: kind
+        type: library
+        metric: validValues
+        mustBe: DataContract
+        description: kind must equal DataContract.

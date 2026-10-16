@@ -1,0 +1,25 @@
+# Copyright 2026 The Bitol Contributors
+# SPDX-License-Identifier: Apache-2.0
+#
+# NEGATIVE TEST - this document MUST fail schema validation.
+# Violation: `unit` is either `rows` or `percent`. `items` is a pre-OMMS
+# value that RFC-0037's migration notes retire. See docs/criteria.md#units.
+
+kind: MaturityModel
+apiVersion: v0.2.0
+id: 5e6f7a8b-9c0d-4e5f-a06b-7c8d9e0f1a2b
+name: invalid-unit
+status: draft
+
+levels:
+  - level: 1
+    name: Basic
+    description: Minimum valid artifact.
+    criteria:
+      - id: L1-C01
+        property: schema
+        type: library
+        metric: rowCount
+        mustBeGreaterOrEqualTo: 1
+        unit: items
+        description: At least one schema object.

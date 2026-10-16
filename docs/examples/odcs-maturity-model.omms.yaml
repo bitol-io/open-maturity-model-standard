@@ -1,0 +1,764 @@
+# Copyright 2026 The Bitol Contributors
+# SPDX-License-Identifier: Apache-2.0
+
+# =============================================================================
+# ODCS Data Contract Maturity Model — v2.0.0
+# Using Open Maturity Model Standard (OMMS) v0.2.0
+# Targets ODCS v3.2.0 (RFC-0038 `context` block)
+# =============================================================================
+#
+# Changes from model v1.0.0 (file odcs-maturity-model-v0.2.0.yaml):
+#
+#   Quality now progresses the way descriptions and classification already
+#   do — EXISTS at Level 3, COVERED at Level 4, COMPLETE at Level 5 — instead
+#   of jumping from nothing to "30% + metadata" in one step:
+#
+#     v1.0.0 L4-C03 (100% valid rule types)        → v2.0.0 L3-C13
+#     v1.0.0 L4-C05 (>= 1 object-level rule)       → v2.0.0 L3-C14
+#     v1.0.0 L4-C06 (>= 1 standard library rule)   → v2.0.0 L3-C15
+#     v1.0.0 L4-C10 (>= 1 primaryKey or unique)    → v2.0.0 L3-C16
+#
+#   Level 4 becomes AI-READY: the ODCS gate steps up to v3.2.0 and the
+#   RFC-0038 `context` block (instructions, constraints, verified statements)
+#   is required alongside quality coverage. Remaining L4 criteria renumbered.
+#
+#   Level 5 adds depth of context (answered statements, per-object context).
+#
+#   Criteria IDs are NOT stable across this major: do not compare L4-Cxx
+#   between v1.0.0 and v2.0.0 by id.
+# =============================================================================
+kind: MaturityModel
+apiVersion: v0.2.0
+id: 7a2f9c13-4e81-4b6a-a3d2-8f1e5d097b4c
+name: odcs-data-contract-maturity-model
+version: 2.0.0
+status: active
+description:
+  purpose: >
+    Measurable maturity model for Open Data Contract Standard (ODCS) data
+    contracts. All criteria are factual and quantifiable — no subjective
+    measures. Level 4 certifies a contract as AI-ready: a machine consumer
+    (quality engine or AI agent) can test it and use it safely.
+  limitations: >
+    Criteria are designed for ODCS v3.2.0. Levels 4 and 5 require the
+    RFC-0038 `context` block introduced in v3.2.0; contracts on earlier
+    editions cap at Level 3. The "latest" apiVersion gate at Levels 4–5
+    means the threshold tracks future ODCS releases.
+  usage: >
+    Evaluate a data contract YAML file against policies first, then each
+    level's criteria sequentially. A contract must satisfy all criteria of
+    a level (and all lower levels) to qualify. Common properties appear in
+    each level where their threshold changes.
+tags:
+  - maturity-model
+  - odcs
+  - data-contract
+  - data-quality
+  - data-qos
+  - ai-ready
+targetApplication: ODCS
+targetApiVersion: v3.2.0
+customProperties:
+  - property: dataQoSReference
+    value: "Perrin, 2023"
+    description: >
+      Data QoS dimensions (Accuracy, Completeness, Conformity, Consistency,
+      Coverage, Timeliness, Uniqueness) per Jean-Georges Perrin, 2023.
+  - property: contextReference
+    value: "RFC-0038"
+    description: >
+      AI and semantic context block (instructions, verifiedStatements,
+      constraints) introduced in ODCS v3.2.0.
+authoritativeDefinitions:
+  - type: canonicalUrl
+    url: https://github.com/bitol-io/open-data-contract-standard
+    description: ODCS repository — the standard this model evaluates against.
+  - type: businessDefinition
+    url: https://medium.com/data-mesh-learning/what-is-data-qos-and-why-is-it-critical-c524b81e3cc1
+    description: Data QoS article defining the 7 quality dimensions and service-level indicators.
+  - type: businessDefinition
+    url: https://dataintelligenceplatform.substack.com/p/five-levels-between-chaos-and-almost
+    description: >
+      "Five Levels Between Chaos and (Almost) AI-Ready Data" by
+      Jean-Georges Perrin, 2026.
+
+# =============================================================================
+# Policies
+# =============================================================================
+# Policies are evaluated before any level criteria.
+# A policy with 'caps' restricts the maximum achievable level.
+# =============================================================================
+
+policies:
+  - id: POL-C01
+    name: Status gate
+    property: status
+    type: library
+    metric: invalidValues
+    arguments:
+      caps:
+        retired: 0
+        deprecated: 1
+        draft: 2
+        proposed: 2
+        active: 5
+    description: >
+      Retired contracts cannot achieve any maturity level. Deprecated
+      contracts are capped at Level 1. Draft and proposed contracts are
+      capped at Level 2. Only active contracts can reach Levels 3–5.
+
+# =============================================================================
+# Maturity Levels
+# =============================================================================
+# Levels are cumulative: a contract must satisfy all lower levels to qualify.
+#
+#   L1 Structural   — it is a valid contract
+#   L2 Descriptive  — a human can understand it
+#   L3 Governed     — someone is accountable, and a first check exists
+#   L4 AI-Ready     — a machine (quality engine, AI agent) can use it safely
+#   L5 Optimized    — coverage is complete and continuously measured
+# =============================================================================
+
+levels:
+  # ===========================================================================
+  # LEVEL 1 — STRUCTURAL (Valid Contract)
+  # ===========================================================================
+  - level: 1
+    name: Structural
+    description: >
+      The contract is syntactically valid, machine-readable, and contains
+      the minimum required fields to identify a dataset and its schema.
+
+    criteria:
+      - id: L1-C01
+        property: apiVersion
+        type: library
+        metric: validValues
+        mustBeGreaterOrEqualTo: v2.0.0
+        description: ODCS standard version is at least v2.0.0.
+
+      - id: L1-C02
+        property: version
+        type: library
+        metric: validValues
+        description: Contract version is present and follows SemVer format (any value).
+
+      - id: L1-C03
+        property: status
+        type: library
+        metric: invalidValues
+        validValues:
+          - proposed
+          - draft
+          - active
+          - deprecated
+          - retired
+        description: Status field is present and contains a valid ODCS status value.
+
+      - id: L1-C04
+        property: kind
+        type: library
+        metric: validValues
+        mustBe: DataContract
+        description: kind must equal DataContract.
+
+      - id: L1-C05
+        property: id
+        type: library
+        metric: nullValues
+        mustBe: 0
+        unit: rows
+        description: id must be present (not null, not empty).
+
+      - id: L1-C06
+        property: name
+        type: library
+        metric: nullValues
+        mustBe: 0
+        unit: rows
+        description: name must be present (not null, not empty).
+
+      - id: L1-C07
+        property: schema
+        type: library
+        metric: rowCount
+        mustBeGreaterOrEqualTo: 1
+        unit: rows
+        description: At least one schema object is defined.
+
+      - id: L1-C08
+        property: schema[].name
+        type: library
+        metric: nullValues
+        mustBe: 0
+        unit: percent
+        description: Every schema object has a name (0% null).
+
+      - id: L1-C09
+        property: schema[].properties[].name
+        type: library
+        metric: nullValues
+        mustBe: 0
+        unit: percent
+        description: Every property has a name (0% null).
+
+      - id: L1-C10
+        property: schema[].properties[].logicalType
+        type: library
+        metric: invalidValues
+        validValues:
+          - string
+          - integer
+          - number
+          - date
+          - timestamp
+          - time
+          - boolean
+          - object
+          - array
+          - vector
+          - map
+        mustBe: 0
+        unit: percent
+        description: Every property has a valid logicalType (0% invalid).
+
+      - id: L1-C11
+        property: jsonSchemaValidation
+        type: text
+        metric: rowCount
+        mustBe: 0
+        unit: rows
+        description: YAML passes ODCS JSON Schema validation with 0 errors.
+
+  # ===========================================================================
+  # LEVEL 2 — DESCRIPTIVE (Semantically Rich)
+  # ===========================================================================
+  - level: 2
+    name: Descriptive
+    description: >
+      The contract is enriched with business context: descriptions, examples,
+      classifications, and domain information that make it understandable by
+      both humans and catalogs.
+
+    criteria:
+      - id: L2-C01
+        property: apiVersion
+        type: library
+        metric: validValues
+        mustBeGreaterOrEqualTo: v3.0.0
+        description: ODCS standard version is at least v3.0.0.
+
+      - id: L2-C02
+        property: version
+        type: library
+        metric: validValues
+        mustBeGreaterOrEqualTo: v0.8.0
+        description: Contract version is at least v0.8.0 (approaching production readiness).
+
+      - id: L2-C03
+        property: status
+        type: library
+        metric: validValues
+        mustBe: active
+        description: Contract status must be active.
+
+      - id: L2-C04
+        property: schema[].properties[].description
+        type: library
+        metric: nullValues
+        mustBeLessThan: 20
+        unit: percent
+        description: ">= 80% of properties have descriptions (< 20% null)."
+
+      - id: L2-C05
+        property: schema[].properties[].classification
+        type: library
+        metric: nullValues
+        mustBeLessOrEqualTo: 50
+        unit: percent
+        description: ">= 50% of properties have a classification value."
+
+      - id: L2-C06
+        property: description.purpose
+        type: library
+        metric: nullValues
+        mustBe: 0
+        unit: rows
+        description: Purpose of the dataset is documented (not null, not empty).
+
+      - id: L2-C07
+        property: domain
+        type: library
+        metric: nullValues
+        mustBe: 0
+        unit: rows
+        description: Domain is specified.
+
+      - id: L2-C08
+        property: tags
+        type: library
+        metric: rowCount
+        mustBeGreaterOrEqualTo: 1
+        unit: rows
+        description: At least one tag at contract level.
+
+      - id: L2-C09
+        property: schema[].description
+        type: library
+        metric: nullValues
+        mustBe: 0
+        unit: percent
+        description: Every schema object has a description (0% null).
+
+      - id: L2-C10
+        property: schema[].properties[].logicalTypeOptions
+        type: library
+        metric: nullValues
+        mustBeLessOrEqualTo: 50
+        unit: percent
+        description: ">= 50% of properties define logicalTypeOptions."
+
+      - id: L2-C11
+        property: schema[].properties[].examples
+        type: library
+        metric: nullValues
+        mustBeLessOrEqualTo: 50
+        unit: percent
+        description: ">= 50% of properties include example values."
+
+      - id: L2-C12
+        property: schema[].properties[].businessName
+        type: library
+        metric: nullValues
+        mustBeLessOrEqualTo: 70
+        unit: percent
+        description: ">= 30% of properties have a businessName (< 70% null)."
+
+  # ===========================================================================
+  # LEVEL 3 — GOVERNED (Operationally Complete, First Check in Place)
+  # ===========================================================================
+  - level: 3
+    name: Governed
+    description: >
+      The contract declares ownership, roles, support channels, SLAs, and
+      infrastructure — everything needed for operational governance and
+      accountability — and carries a first, standard, executable data
+      quality check plus a declared key. Someone is accountable, and there
+      is at least one thing to hold them to.
+
+    criteria:
+      - id: L3-C01
+        property: apiVersion
+        type: library
+        metric: validValues
+        mustBeGreaterOrEqualTo: v3.1.0
+        description: ODCS standard version must be at least v3.1.0.
+
+      - id: L3-C02
+        property: version
+        type: library
+        metric: validValues
+        mustBeGreaterOrEqualTo: v1.0.0
+        description: Contract version must be at least v1.0.0 (production).
+
+      - id: L3-C03
+        property: schema[].properties[].classification
+        type: library
+        metric: nullValues
+        mustBe: 0
+        unit: percent
+        description: 100% of properties have a classification.
+
+      - id: L3-C04
+        property: team.members
+        type: library
+        metric: rowCount
+        mustBeGreaterOrEqualTo: 1
+        unit: rows
+        description: At least one team member with username and role.
+
+      - id: L3-C05
+        property: roles
+        type: library
+        metric: rowCount
+        mustBeGreaterOrEqualTo: 1
+        unit: rows
+        description: At least one role with name and description.
+
+      - id: L3-C06
+        property: support
+        type: library
+        metric: rowCount
+        mustBeGreaterOrEqualTo: 1
+        unit: rows
+        description: At least one support channel with channel + tool.
+
+      - id: L3-C07
+        property: slaProperties
+        type: library
+        metric: rowCount
+        mustBeGreaterOrEqualTo: 1
+        unit: rows
+        description: At least one SLA property with property, value, and unit.
+
+      - id: L3-C08
+        property: servers
+        type: library
+        metric: rowCount
+        mustBeGreaterOrEqualTo: 1
+        unit: rows
+        description: At least one server with type and environment.
+
+      - id: L3-C09
+        property: authoritativeDefinitions
+        type: library
+        metric: rowCount
+        mustBeGreaterOrEqualTo: 1
+        unit: rows
+        description: At least one authoritative definition (url + type).
+
+      - id: L3-C10
+        property: authoritativeDefinitions[]
+        type: library
+        metric: rowCount
+        mustBeGreaterOrEqualTo: 1
+        unit: rows
+        arguments:
+          where:
+            field: type
+            in:
+              - canonicalUrl
+        description: >
+          Root-level canonicalUrl entry pointing to the contract's stable URL.
+
+      - id: L3-C11
+        property: description.limitations
+        type: library
+        metric: nullValues
+        mustBe: 0
+        unit: rows
+        description: Limitations of the data are documented.
+
+      - id: L3-C12
+        property: description.usage
+        type: library
+        metric: nullValues
+        mustBe: 0
+        unit: rows
+        description: Usage guidance is documented.
+
+      # --- Initial data quality (moved down from Level 4 in model v1.0.0) ---
+
+      - id: L3-C13
+        property: schema[].quality[]
+        type: library
+        metric: rowCount
+        mustBeGreaterOrEqualTo: 1
+        unit: rows
+        description: At least one quality rule at object level (schema object or root).
+
+      - id: L3-C14
+        property: quality[].type
+        type: library
+        metric: invalidValues
+        validValues:
+          - text
+          - library
+          - sql
+          - custom
+        mustBe: 0
+        unit: percent
+        description: 100% of quality rules use a valid type.
+
+      - id: L3-C15
+        property: quality[].type
+        type: library
+        metric: rowCount
+        mustBeGreaterOrEqualTo: 1
+        unit: rows
+        arguments:
+          where:
+            field: type
+            in:
+              - library
+        description: At least one library rule with a standard rule name.
+
+      - id: L3-C16
+        property: schema[].properties[]
+        type: library
+        metric: rowCount
+        mustBeGreaterOrEqualTo: 1
+        unit: rows
+        arguments:
+          anyOf:
+            - primaryKey
+            - unique
+        description: At least one property declares primaryKey or unique.
+
+  # ===========================================================================
+  # LEVEL 4 — AI-READY (Testable and Safe for Machine Consumers)
+  # ===========================================================================
+  - level: 4
+    name: AI-Ready
+    description: >
+      The contract is consumable by machines without a human in the loop.
+      Data quality rules cover a meaningful share of the schema with
+      dimensions, severity, and scheduling, so a quality engine can enforce
+      them — and the RFC-0038 context block gives AI agents, LLMs, and
+      semantic layers explicit instructions, constraints, and verified
+      statements so they use the data correctly.
+
+    criteria:
+      - id: L4-C01
+        property: apiVersion
+        type: library
+        metric: validValues
+        mustBeGreaterOrEqualTo: v3.2.0
+        description: Must use ODCS v3.2.0 or later (introduces the context block).
+
+      # --- Quality coverage ---
+
+      - id: L4-C02
+        property: schema[].properties[]
+        type: library
+        metric: rowCount
+        mustBeGreaterOrEqualTo: 30
+        unit: percent
+        arguments:
+          having: quality
+        description: ">= 30% of properties have at least one quality rule."
+
+      - id: L4-C03
+        property: schema[].properties[].required
+        type: library
+        metric: nullValues
+        mustBeLessOrEqualTo: 50
+        unit: percent
+        description: ">= 50% of properties have the required flag explicitly set."
+
+      - id: L4-C04
+        property: quality[].dimension
+        type: library
+        metric: nullValues
+        mustBeLessOrEqualTo: 50
+        unit: percent
+        description: ">= 50% of quality rules specify a dimension."
+
+      - id: L4-C05
+        property: quality[].severity
+        type: library
+        metric: nullValues
+        mustBeLessOrEqualTo: 50
+        unit: percent
+        description: ">= 50% of quality rules specify a severity."
+
+      - id: L4-C06
+        property: quality[]
+        type: library
+        metric: rowCount
+        mustBeGreaterOrEqualTo: 1
+        unit: rows
+        arguments:
+          having:
+            - schedule
+            - scheduler
+        description: At least one quality rule with schedule + scheduler.
+
+      - id: L4-C07
+        property: schema[].relationships
+        type: text
+        metric: rowCount
+        description: >
+          Relationships defined between properties (if foreign keys exist).
+          Scores as met when no foreign keys apply.
+
+      - id: L4-C08
+        property: slaProperties[]
+        type: library
+        metric: rowCount
+        mustBeGreaterOrEqualTo: 1
+        unit: rows
+        arguments:
+          having:
+            - scheduler
+            - schedule
+        description: At least one SLA property with scheduler + schedule.
+
+      # --- AI context (RFC-0038) ---
+
+      - id: L4-C09
+        property: context.instructions
+        type: library
+        metric: nullValues
+        mustBe: 0
+        unit: rows
+        description: >
+          Root-level context.instructions is present: natural-language
+          guidance for AI agents on how to use this contract. The ODCS
+          string shorthand (context: "...") counts as instructions.
+
+      - id: L4-C10
+        property: context.constraints
+        type: library
+        metric: rowCount
+        mustBeGreaterOrEqualTo: 1
+        unit: rows
+        description: >
+          At least one root-level context constraint: negative guidance on
+          what AI agents must NOT do with this data.
+
+      - id: L4-C11
+        property: context.verifiedStatements
+        type: library
+        metric: rowCount
+        mustBeGreaterOrEqualTo: 1
+        unit: rows
+        description: >
+          At least one root-level verified statement: a canonical question
+          an agent should be able to answer from this contract.
+
+  # ===========================================================================
+  # LEVEL 5 — OPTIMIZED (Continuously Measured, Fully Contextualised)
+  # ===========================================================================
+  - level: 5
+    name: Optimized
+    description: >
+      The contract achieves full coverage across schema, quality, SLA,
+      metadata, and AI context — enabling continuous measurement and
+      improvement aligned with Data QoS, and letting AI agents answer real
+      business questions from it with curated, verified answers.
+
+    criteria:
+      - id: L5-C01
+        property: schema[].properties[].description
+        type: library
+        metric: nullValues
+        mustBe: 0
+        unit: percent
+        description: 100% of properties have descriptions.
+
+      - id: L5-C02
+        property: schema[].properties[]
+        type: library
+        metric: rowCount
+        mustBeGreaterOrEqualTo: 80
+        unit: percent
+        arguments:
+          having: quality
+        description: ">= 80% of properties have at least one quality rule."
+
+      - id: L5-C03
+        property: quality[].type
+        type: library
+        metric: validValues
+        validValues:
+          - library
+          - sql
+        mustBeGreaterOrEqualTo: 80
+        unit: percent
+        description: ">= 80% of quality rules are executable (library or sql)."
+
+      - id: L5-C04
+        property: schema[].properties[].required
+        type: library
+        metric: nullValues
+        mustBe: 0
+        unit: percent
+        description: 100% of properties have the required flag explicitly set.
+
+      - id: L5-C05
+        property: schema[].properties
+        type: text
+        metric: rowCount
+        mustBe: 100
+        unit: percent
+        description: Every physical field has a corresponding contract property (100% coverage).
+
+      - id: L5-C06
+        property: quality[].dimension
+        type: library
+        metric: rowCount
+        mustBeGreaterOrEqualTo: 3
+        unit: rows
+        arguments:
+          distinct: true
+          validValues:
+            - accuracy
+            - completeness
+            - conformity
+            - consistency
+            - coverage
+            - timeliness
+            - uniqueness
+        description: >
+          >= 3 of 7 Data QoS dimensions represented across all quality rules.
+
+      - id: L5-C07
+        property: slaProperties
+        type: library
+        metric: rowCount
+        mustBeGreaterOrEqualTo: 3
+        unit: rows
+        description: SLA covers at least 3 operational aspects.
+
+      - id: L5-C08
+        property: pricing
+        type: text
+        metric: rowCount
+        description: >
+          Pricing populated if consumers are charged. Scores as met when
+          pricing does not apply.
+
+      - id: L5-C09
+        property: tenant
+        type: library
+        metric: nullValues
+        mustBe: 0
+        unit: rows
+        description: Tenant / organization is identified (not null, not empty).
+
+      - id: L5-C10
+        property: schema[].properties[]
+        type: library
+        metric: rowCount
+        mustBeGreaterOrEqualTo: 1
+        unit: rows
+        arguments:
+          anyOf:
+            - transformLogic
+            - transformDescription
+        description: >
+          At least one property documents transformLogic or
+          transformDescription for derived fields.
+
+      # --- AI context depth (RFC-0038) ---
+
+      - id: L5-C11
+        property: context.verifiedStatements
+        type: library
+        metric: rowCount
+        mustBeGreaterOrEqualTo: 3
+        unit: rows
+        description: >
+          At least three root-level verified statements, giving agents a
+          representative set of canonical questions for this contract.
+
+      - id: L5-C12
+        property: context.verifiedStatements[].answer
+        type: library
+        metric: nullValues
+        mustBeLessOrEqualTo: 50
+        unit: percent
+        description: >
+          >= 50% of verified statements carry a curated answer that agents
+          return verbatim when a query is semantically close.
+
+      - id: L5-C13
+        property: schema[].context
+        type: library
+        metric: nullValues
+        mustBeLessOrEqualTo: 50
+        unit: percent
+        description: >
+          >= 50% of schema objects carry their own context block, scoping
+          AI guidance to the object rather than only the contract.
