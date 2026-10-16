@@ -16,20 +16,26 @@ Thank you for your interest in contributing to Open Maturity Model Standard (OMM
 
 ## Branching and merging
 
-`main` is protected by a repository rule that requires changes to land through a **pull request** —
-direct pushes to `main` are rejected.
+> **Not currently enforced.** OMMS is a private repository on a GitHub Free organisation, and GitHub
+> refuses both repository rulesets and classic branch protection for a private repository on that plan.
+> Everything below is therefore the policy this project follows, not a rule the server applies — a
+> direct push to `main` will succeed. It becomes enforceable, unchanged, the moment the repository is
+> public or the organisation is upgraded.
+
+Changes land on `main` through a **pull request** — direct pushes to `main` are rejected.
 
 Reviews are not required. Any TSC member with write access can merge their own pull request as soon as
-the checks below are green; a second reviewer is welcome but never a gate. `main` cannot be
+the checks below are green; a second reviewer is welcome but never a gate. `main` is never
 force-pushed or deleted, and pull requests are merged with a **merge commit** — `main` does not accept
 squash or rebase merges.
 
 The `validate-examples` workflow runs on every pull request and verifies every example against the
 JSON schema, and asserts that the deliberately-invalid fixtures under `tests/negative/` are rejected.
-It is a **required check**: a pull request cannot be merged until it passes.
+It is meant to be a **required check**, so that a pull request cannot be merged until it passes; it runs
+on every pull request but does not yet gate the merge. Treat a red run as blocking anyway.
 
-Documentation lives in `docs/` and is built with mkdocs. No documentation site is published yet: OMMS
-is a private repository on a GitHub Free organisation, where Pages is unavailable.
+Documentation lives in `docs/` and is built with mkdocs. No documentation site is published yet, for
+the same reason: GitHub Pages is unavailable for a private repository on the Free plan.
 
 ## Adding or changing a maturity model
 
