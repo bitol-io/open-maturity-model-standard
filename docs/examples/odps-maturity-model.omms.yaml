@@ -3,7 +3,7 @@
 
 # =============================================================================
 # ODPS Data Product Maturity Model — v2.1.0
-# Using Open Maturity Model Standard (OMMS) v0.2.1
+# Using Open Maturity Model Standard (OMMS) v0.2.2
 # Targets ODPS v1.1.0 (RFC-0038 `context` block)
 # =============================================================================
 #
@@ -31,7 +31,7 @@
 #   Criteria IDs L4-Pxx / L5-Pxx are extended, not renumbered.
 # =============================================================================
 kind: MaturityModel
-apiVersion: v0.2.1
+apiVersion: v0.2.2
 id: 3c8a1f47-6d9e-4a2b-b5f3-9e2d4c7a8b1f
 name: odps-data-product-maturity-model
 version: 2.1.0

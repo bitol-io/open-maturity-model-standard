@@ -7,7 +7,7 @@
 # See docs/criteria.md#metrics and #threshold-operators.
 
 kind: MaturityModel
-apiVersion: v0.2.1
+apiVersion: v0.2.2
 id: 0a1b2c3d-0000-4000-8000-000000000002
 name: presence-and-membership
 status: draft

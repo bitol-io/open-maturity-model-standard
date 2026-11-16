@@ -27,7 +27,7 @@ A single custom property.
 ```yaml
 customProperties:
   - property: exampleOf
-    value: OMMS v0.2.1
+    value: OMMS v0.2.2
 ```
 
 ### Full

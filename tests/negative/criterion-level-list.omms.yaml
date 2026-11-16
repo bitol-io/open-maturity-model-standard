@@ -7,7 +7,7 @@
 # See docs/criteria.md#arguments.
 
 kind: MaturityModel
-apiVersion: v0.2.1
+apiVersion: v0.2.2
 id: 6f7a8b9c-0d1e-4f2a-8b3c-4d5e6f7a8b06
 name: criterion-level-list
 status: draft

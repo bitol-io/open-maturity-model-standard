@@ -55,4 +55,4 @@ ODPS model asks about observability, dependencies and context instead, and a cri
 often has no counterpart in the other.
 
 > **Note:** a model version (`version: 2.1.0`) is not an OMMS version. Both models are written in the
-> OMMS **v0.2.1** syntax while being the second major version of the model itself.
+> OMMS **v0.2.2** syntax while being the second major version of the model itself.

@@ -7,13 +7,13 @@
 # See docs/custom-other-properties.md#where-they-may-appear.
 
 kind: MaturityModel
-apiVersion: v0.2.1
+apiVersion: v0.2.2
 id: 0a1b2c3d-0000-4000-8000-000000000009
 name: extensions-everywhere
 status: draft
 customProperties:
   - property: exampleOf
-    value: OMMS v0.2.1
+    value: OMMS v0.2.2
 authoritativeDefinitions:
   - type: canonicalUrl
     url: https://github.com/bitol-io/open-maturity-model-standard
