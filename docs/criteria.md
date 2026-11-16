@@ -60,7 +60,7 @@ The same shape with arguments shaping the collection, and a percentage threshold
 | `criteria[].arguments`     | object  | Arguments              | No       | Parameters for the metric. See [Arguments](#arguments).                                                                                                                          |                                     |
 | `criteria[].unit`          | string  | Unit                   | No       | `rows` or `percent`. See [Units](#units).                                                                                                                                        | `percent`                           |
 | `criteria[].description`   | string  | Description            | No       | Human-readable explanation of the criterion, and of what a passing artifact looks like.                                                                                          | `Purpose is documented.`            |
-| `<operator>`               | any     | *(the operator key)*   | No       | The threshold, named by one of the eight operators. See [Threshold operators](#threshold-operators).                                                                              | `mustBeGreaterOrEqualTo: 1`         |
+| `<operator>`               | any     | *(the operator key)*   | Yes (unless `metric` is `validValues`) | The threshold, named by one of the eight operators. See [Threshold operators](#threshold-operators) and [Criteria without an operator](#criteria-without-an-operator). | `mustBeGreaterOrEqualTo: 1`         |
 | `criteria[].tags`          | array   | Tags                   | No       | List of tags.                                                                                                                                                                    | `[quality]`                         |
 | `criteria[].authoritativeDefinitions` | array | Authoritative Defs | No     | List of links to sources that provide more details on this criterion.                                                                                                            |                                     |
 | `criteria[].customProperties` | array | Custom Properties     | No       | A list of key/value pairs for custom properties.                                                                                                                                 |                                     |
@@ -136,8 +136,9 @@ metric.
 
 ## Threshold operators
 
-Exactly one operator states the threshold. Its name is the comparison; its value is what to compare
-against.
+At most one operator states the threshold. Its name is the comparison; its value is what to compare
+against. A counting metric always needs one; `validValues` may omit it (see
+[Criteria without an operator](#criteria-without-an-operator)).
 
 | Operator                 | Meaning                    |
 | ------------------------ | -------------------------- |
@@ -177,6 +178,34 @@ to the current version of the `targetApplication` standard, falling back to the 
   mustBe: latest
   description: The contract tracks the latest ODCS release.
 ```
+
+### Criteria without an operator
+
+The operator is optional for `validValues` only. Without one, the criterion is a **presence check**:
+it passes when `property` holds a non-empty value and, if a `validValues` argument is given, when that
+value is in the list.
+
+```yaml
+# Passes when version is present, whatever its value
+- id: L1-C02
+  property: version
+  type: library
+  metric: validValues
+  description: Contract version is present.
+
+# Passes when status is present and is one of the listed values
+- id: L1-C03
+  property: status
+  type: library
+  metric: validValues
+  arguments:
+    validValues: [proposed, draft, active, deprecated, retired]
+  description: Status is present and holds a valid ODCS status value.
+```
+
+A counting metric (`rowCount`, `nullValues`, `invalidValues`) always states an operator. A count with
+no threshold has no pass or fail meaning, and OMMS does not assume one such as `mustBe: 0`: write the
+threshold explicitly.
 
 ## Units
 

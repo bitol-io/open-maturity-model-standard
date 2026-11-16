@@ -146,13 +146,14 @@ levels:
       - id: L1-C03
         property: status
         type: library
-        metric: invalidValues
-        validValues:
-          - proposed
-          - draft
-          - active
-          - deprecated
-          - retired
+        metric: validValues
+        arguments:
+          validValues:
+            - proposed
+            - draft
+            - active
+            - deprecated
+            - retired
         description: Status field is present and contains a valid ODCS status value.
 
       - id: L1-C04
