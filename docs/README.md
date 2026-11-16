@@ -38,6 +38,43 @@ itself.
 - **Policy-aware** — organizational rules (a status cap, a sourcing convention) are core model behaviour and get first-class syntax, not a corner of `customProperties`.
 - **Non-prescriptive** — the standard fixes how a model is written, never how many levels it has or what they are called.
 
+## How OMMS differs from ODCS and ODPS
+
+An OMMS document looks like a Bitol document, since it shares the same envelope and building blocks.
+It has a different shape, though, because it describes something else. A data contract or a data
+product describes **an asset**. A maturity model describes **how to evaluate** a data contract or a
+data product. It points *at* another document instead of describing data.
+
+### What is the same
+
+- **The envelope**: `kind`, `apiVersion`, `id`, `name`, `version`, `status`, `tags`.
+- **The `description` object**, with the same `purpose`, `limitations` and `usage` fields.
+- **The extension structures**: `customProperties` and `authoritativeDefinitions`, with the same fields
+  and the same recommended `type` values. See [Custom & Other Properties](custom-other-properties.md).
+- **The data quality vocabulary**: a criterion is written like an ODCS data quality rule, with `type`,
+  `metric`, `arguments`, a threshold operator and `unit`. OMMS adds one metric of its own, `validValues`.
+  See [Metrics](criteria.md#metrics).
+
+### What is different
+
+| Aspect | ODCS (data contract) | ODPS (data product) | OMMS (maturity model) |
+| ------ | -------------------- | ------------------- | --------------------- |
+| `kind` | `DataContract` | `DataProduct` | `MaturityModel` |
+| Subject | A dataset and the agreement around it | A data product and its ports | Another Bitol document, named by `targetApplication` and `targetApiVersion` |
+| Required fields | `apiVersion`, `kind`, `id`, `version` | `apiVersion`, `kind`, `id` | `apiVersion`, `kind`, `id`, `status`, `levels` |
+| `status` | Free string | Free string | Closed list: `proposed`, `draft`, `active`, `deprecated`, `retired` |
+| Body | Many independent sections: `schema`, `servers`, `team`, `roles`, `support`, `price`, `slaProperties`… | Ports (`inputPorts`, `outputPorts`, `managementPorts`), `support`, `team` | A single nested spine: `policies`, then `levels[]` → `criteria[]` |
+| Order | Sections are unordered | Sections are unordered | Order matters: policies run first, levels are cumulative from the lowest up |
+| Ownership and operations | `team`, `roles`, `support`, `domain`, `tenant`, `servers`, creation timestamp | `team`, `support`, `domain`, `tenant`, creation timestamp | None: a model carries no team, support, domain, tenant, servers or timestamps |
+| Where a rule applies | `quality[]` nested in the schema object or property it checks, and measured against the **data** | n/a | Anywhere in the evaluated **document**, reached by a `property` path such as `schema[].properties[].description` |
+| Rule `type` | `text`, `library`, `sql`, `custom` | n/a | `library` or `text` only, with `text` passing automatically |
+| Metrics | `library` metrics `nullValues`, `missingValues`, `invalidValues`, `duplicateValues`, `rowCount`, plus SQL and vendor checks | n/a | Closed to four: `rowCount`, `nullValues` and `invalidValues` from ODCS, which count items, plus `validValues`, specific to OMMS, which reads a value |
+| Cross-document references | `dataProduct`, references | `contractId` on ports | `relatesTo: "[DataContract]…"` lets a criterion read a linked document |
+
+In short, ODCS and ODPS are **wide**: many optional sections side by side, any of which may be left
+out. OMMS is **deep**: one required list of levels, each holding the criteria an artifact must meet,
+behind an optional list of policies that cap the result.
+
 ## Table of Contents
 
 * [Fundamentals](fundamentals.md) — the envelope (`kind`, `apiVersion`, `id`, `name`, `version`, `status`, `targetApplication`) and the `description` object.
@@ -100,7 +137,7 @@ levels:
 | [`docs/`](https://github.com/bitol-io/open-maturity-model-standard/tree/main/docs) | This documentation. |
 | [`docs/examples/`](examples/README.md) | Complete maturity models. |
 | [`tests/negative/`](https://github.com/bitol-io/open-maturity-model-standard/tree/main/tests/negative) | Deliberately invalid documents the schema must reject. |
-| [`issues.md`](https://github.com/bitol-io/open-maturity-model-standard/blob/main/issues.md) | Questions the standard has not settled. |
+| [Issues](https://github.com/bitol-io/open-maturity-model-standard/issues) | Questions the standard has not settled, tracked on GitHub. |
 
 OMMS is defined by [RFC-0037](https://github.com/bitol-io/tsc/blob/main/rfcs/0037-omms.md), filed with
 the Bitol TSC and not yet approved, and is part of the [Bitol](https://bitol.io) family of standards,
