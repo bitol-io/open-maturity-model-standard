@@ -137,7 +137,7 @@ levels:
 | [`docs/`](https://github.com/bitol-io/open-maturity-model-standard/tree/main/docs) | This documentation. |
 | [`docs/examples/`](examples/README.md) | Complete maturity models. |
 | [`tests/negative/`](https://github.com/bitol-io/open-maturity-model-standard/tree/main/tests/negative) | Deliberately invalid documents the schema must reject. |
-| [`issues.md`](https://github.com/bitol-io/open-maturity-model-standard/blob/main/issues.md) | Questions the standard has not settled. |
+| [Issues](https://github.com/bitol-io/open-maturity-model-standard/issues) | Questions the standard has not settled, tracked on GitHub. |
 
 OMMS is defined by [RFC-0037](https://github.com/bitol-io/tsc/blob/main/rfcs/0037-omms.md), filed with
 the Bitol TSC and not yet approved, and is part of the [Bitol](https://bitol.io) family of standards,

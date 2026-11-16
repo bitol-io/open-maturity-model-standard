@@ -44,8 +44,8 @@ Files using the `.omms.yaml` extension are auto-detected as OMMS.
 
 ## Known open issues
 
-Questions the standard has not settled yet are recorded, with options and a recommendation, in
-[`issues.md`](https://github.com/bitol-io/open-maturity-model-standard/blob/main/issues.md).
+Questions the standard has not settled yet are tracked, with options and a recommendation, as
+[GitHub issues](https://github.com/bitol-io/open-maturity-model-standard/issues).
 
 ## Articles and Other Resources
 
