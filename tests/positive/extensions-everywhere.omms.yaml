@@ -7,13 +7,13 @@
 # See docs/custom-other-properties.md#where-they-may-appear.
 
 kind: MaturityModel
-apiVersion: v0.2.0
+apiVersion: v0.2.1
 id: 0a1b2c3d-0000-4000-8000-000000000009
 name: extensions-everywhere
 status: draft
 customProperties:
   - property: exampleOf
-    value: OMMS v0.2.0
+    value: OMMS v0.2.1
 authoritativeDefinitions:
   - type: canonicalUrl
     url: https://github.com/bitol-io/open-maturity-model-standard
@@ -21,7 +21,7 @@ authoritativeDefinitions:
 policies:
   - id: POL-C01
     property: status
-    metric: validValues
+    metric: valueOf
     arguments:
       caps:
         retired: 0
@@ -47,7 +47,7 @@ levels:
     criteria:
       - id: L1-C01
         property: kind
-        metric: validValues
+        metric: valueOf
         mustBe: DataContract
         tags: [structural]
         customProperties:

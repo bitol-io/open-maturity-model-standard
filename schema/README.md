@@ -31,6 +31,7 @@ update the following section:
       ...,
       "versions": {
         "<new_version>": "https://github.com/bitol-io/open-maturity-model-standard/blob/main/schema/omms-json-schema-<new_version>.json",
+        "v0.2.1": "https://github.com/bitol-io/open-maturity-model-standard/blob/main/schema/omms-json-schema-v0.2.1.json",
         "v0.2.0": "https://github.com/bitol-io/open-maturity-model-standard/blob/main/schema/omms-json-schema-v0.2.0.json"
       }
     },
@@ -46,6 +47,6 @@ OORS schema directory uses.
 bash scripts/validate-examples.sh
 ```
 
-The script compiles the schema, validates every example under `docs/examples/`, and asserts that every
-fixture under `tests/negative/` is rejected. Set `JSON_SCHEMA_VERSION` to validate against a different
-version, e.g. `JSON_SCHEMA_VERSION=v0.2.0`.
+The script compiles the schema, validates every example under `docs/examples/`, asserts that every
+fixture under `tests/positive/` is accepted, and that every fixture under `tests/negative/` is rejected. Set `JSON_SCHEMA_VERSION` to validate against a different
+version, e.g. `JSON_SCHEMA_VERSION=v0.2.0`. The default is the newest version.

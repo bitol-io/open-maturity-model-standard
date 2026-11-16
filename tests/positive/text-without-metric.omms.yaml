@@ -7,7 +7,7 @@
 # See docs/criteria.md#library-and-text.
 
 kind: MaturityModel
-apiVersion: v0.2.0
+apiVersion: v0.2.1
 id: 0a1b2c3d-0000-4000-8000-000000000006
 name: text-without-metric
 status: draft

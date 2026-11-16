@@ -7,7 +7,7 @@
 # See docs/criteria.md#arguments and #cross-artifact-criteria.
 
 kind: MaturityModel
-apiVersion: v0.2.0
+apiVersion: v0.2.1
 id: 0a1b2c3d-0000-4000-8000-000000000008
 name: arguments
 status: draft
@@ -20,7 +20,7 @@ levels:
       - id: L1-P01
         property: outputPorts[]
         type: library
-        metric: rowCount
+        metric: count
         arguments:
           having: [name, version]
         mustBeGreaterOrEqualTo: 1
@@ -28,7 +28,7 @@ levels:
       - id: L1-P02
         property: team.members[]
         type: library
-        metric: rowCount
+        metric: count
         arguments:
           anyOf: [username, name]
         mustBeGreaterOrEqualTo: 1
@@ -36,7 +36,7 @@ levels:
       - id: L1-P03
         property: team.members[].role
         type: library
-        metric: rowCount
+        metric: count
         arguments:
           distinct: true
           where:
@@ -46,7 +46,7 @@ levels:
       - id: L1-P04
         property: outputPorts[].contractId
         type: library
-        metric: rowCount
+        metric: count
         arguments:
           relatesTo: "[DataContract].status"
           where:

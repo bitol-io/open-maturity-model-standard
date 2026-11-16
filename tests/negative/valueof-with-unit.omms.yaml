@@ -1,0 +1,24 @@
+# Copyright 2026 The Bitol Contributors
+# SPDX-License-Identifier: Apache-2.0
+#
+# NEGATIVE TEST - this document MUST fail schema validation.
+# Violation: `valueOf` reads a value, not a count, so it takes no `unit`.
+# See docs/criteria.md#metrics.
+
+kind: MaturityModel
+apiVersion: v0.2.1
+id: 6f7a8b9c-0d1e-4f2a-8b3c-4d5e6f7a8b04
+name: valueof-with-unit
+status: draft
+
+levels:
+  - level: 1
+    name: Basic
+    description: Minimum valid artifact.
+    criteria:
+      - id: L1-C01
+        property: kind
+        type: library
+        metric: valueOf
+        mustBe: DataContract
+        unit: rows

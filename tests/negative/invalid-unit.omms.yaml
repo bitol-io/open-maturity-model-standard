@@ -6,7 +6,7 @@
 # value that RFC-0037's migration notes retire. See docs/criteria.md#units.
 
 kind: MaturityModel
-apiVersion: v0.2.0
+apiVersion: v0.2.1
 id: 5e6f7a8b-9c0d-4e5f-a06b-7c8d9e0f1a2b
 name: invalid-unit
 status: draft
@@ -19,7 +19,7 @@ levels:
       - id: L1-C01
         property: schema
         type: library
-        metric: rowCount
+        metric: count
         mustBeGreaterOrEqualTo: 1
         unit: items
         description: At least one schema object.

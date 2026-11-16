@@ -7,7 +7,7 @@
 # See docs/fundamentals.md#field-descriptions.
 
 kind: MaturityModel
-apiVersion: v0.2.0
+apiVersion: v0.2.1
 id: 0a1b2c3d-0000-4000-8000-000000000001
 status: draft
 
@@ -18,5 +18,5 @@ levels:
     criteria:
       - id: L1-C01
         property: kind
-        metric: validValues
+        metric: valueOf
         mustBe: DataContract

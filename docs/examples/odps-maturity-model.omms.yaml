@@ -2,10 +2,17 @@
 # SPDX-License-Identifier: Apache-2.0
 
 # =============================================================================
-# ODPS Data Product Maturity Model — v2.0.0
-# Using Open Maturity Model Standard (OMMS) v0.2.0 (RFC-0037)
+# ODPS Data Product Maturity Model — v2.1.0
+# Using Open Maturity Model Standard (OMMS) v0.2.1 (RFC-0037)
 # Targets ODPS v1.1.0 (RFC-0038 `context` block)
 # =============================================================================
+#
+# Changes from model v2.0.0:
+#
+#   Rewritten for OMMS v0.2.1, which replaces the ODCS data quality metrics
+#   with two of its own: `valueOf` (read a value) and `count` (count the
+#   items present, or their share with `unit: percent`). Every check means
+#   what it meant in v2.0.0; criteria IDs are unchanged.
 #
 # Changes from model v1.0.0 (file odps-maturity-model-v1.0.0.yml):
 #
@@ -24,10 +31,10 @@
 #   Criteria IDs L4-Pxx / L5-Pxx are extended, not renumbered.
 # =============================================================================
 kind: MaturityModel
-apiVersion: v0.2.0
+apiVersion: v0.2.1
 id: 3c8a1f47-6d9e-4a2b-b5f3-9e2d4c7a8b1f
 name: odps-data-product-maturity-model
-version: 2.0.0
+version: 2.1.0
 status: active
 description:
   purpose: >
@@ -96,7 +103,7 @@ policies:
     name: statusCap
     property: status
     type: library
-    metric: validValues
+    metric: valueOf
     arguments:
       caps:
         retired: 0
@@ -119,7 +126,7 @@ policies:
     name: selfSourcing
     property: inputPorts
     type: library
-    metric: validValues
+    metric: valueOf
     arguments:
       where:
         field: name
@@ -143,14 +150,12 @@ policies:
 #   L4 AI-Ready      — a machine (observer, AI agent) can use it safely
 #   L5 Optimized     — a living product with complete context
 #
-# Metrics and operators align with ODCS data quality vocabulary:
+# Criteria:
 #   type: library     — machine-evaluable criterion
 #   type: text        — human-readable criterion (auto-pass)
 #
-#   metric: rowCount      — count items in a collection
-#   metric: nullValues    — count null or empty values
-#   metric: invalidValues — count values not in an allowed set
-#   metric: validValues   — check values against an allowed set
+#   metric: valueOf   — read the value and compare it to the threshold
+#   metric: count     — count the items present (their share with percent)
 #
 #   unit: rows    — count of items
 #   unit: percent — percentage (0-100)
@@ -161,7 +166,7 @@ policies:
 #   where      — filter items by field value
 #   distinct   — count unique values only
 #   relatesTo  — resolve cross-artifact or intra-file dependency
-#   validValues — restrict to values in this list
+#   in         — count only the items whose value is in this list
 # =============================================================================
 
 levels:
@@ -180,42 +185,36 @@ levels:
       - id: L1-P01
         property: apiVersion
         type: library
-        metric: validValues
+        metric: valueOf
         mustBeGreaterOrEqualTo: v1.0.0
         description: ODPS standard version is at least v1.0.0.
 
       - id: L1-P02
         property: kind
         type: library
-        metric: validValues
+        metric: valueOf
         mustBe: DataProduct
         description: kind must equal DataProduct.
 
       - id: L1-P03
         property: id
         type: library
-        metric: nullValues
-        mustBe: 0
+        metric: count
+        mustBe: 1
         unit: rows
         description: id must be present (not null, not empty). UUID recommended.
 
       - id: L1-P04
         property: status
         type: library
-        metric: validValues
-        arguments:
-          validValues:
-            - proposed
-            - draft
-            - active
-            - deprecated
-            - retired
+        metric: valueOf
+        mustBeIn: [proposed, draft, active, deprecated, retired]
         description: Status field is present and contains a valid ODPS status value.
 
       - id: L1-P05
         property: outputPorts
         type: library
-        metric: rowCount
+        metric: count
         mustBeGreaterOrEqualTo: 1
         unit: rows
         description: At least one output port is defined.
@@ -223,16 +222,16 @@ levels:
       - id: L1-P06
         property: outputPorts[].name
         type: library
-        metric: nullValues
-        mustBe: 0
+        metric: count
+        mustBe: 100
         unit: percent
         description: 100% of output ports have a name.
 
       - id: L1-P07
         property: outputPorts[].contractId
         type: library
-        metric: nullValues
-        mustBe: 0
+        metric: count
+        mustBe: 100
         unit: percent
         description: 100% of output ports have a contractId linking to an ODCS contract.
 
@@ -250,41 +249,38 @@ levels:
       - id: L2-P01
         property: status
         type: library
-        metric: validValues
-        arguments:
-          validValues:
-            - active
-            - deprecated
+        metric: valueOf
+        mustBeIn: [active, deprecated]
         description: Status must be active or deprecated.
 
       - id: L2-P02
         property: name
         type: library
-        metric: nullValues
-        mustBe: 0
+        metric: count
+        mustBe: 1
         unit: rows
         description: Product name must be present (not null, not empty).
 
       - id: L2-P03
         property: version
         type: library
-        metric: nullValues
-        mustBe: 0
+        metric: count
+        mustBe: 1
         unit: rows
         description: Version is present and follows SemVer format.
 
       - id: L2-P04
         property: domain
         type: library
-        metric: nullValues
-        mustBe: 0
+        metric: count
+        mustBe: 1
         unit: rows
         description: Business domain is specified.
 
       - id: L2-P05
         property: tags[]
         type: library
-        metric: rowCount
+        metric: count
         mustBeGreaterOrEqualTo: 1
         unit: rows
         description: At least one tag.
@@ -292,39 +288,39 @@ levels:
       - id: L2-P06
         property: description.purpose
         type: library
-        metric: nullValues
-        mustBe: 0
+        metric: count
+        mustBe: 1
         unit: rows
         description: Purpose of the data product is documented.
 
       - id: L2-P07
         property: description.usage
         type: library
-        metric: nullValues
-        mustBe: 0
+        metric: count
+        mustBe: 1
         unit: rows
         description: Usage guidance is documented.
 
       - id: L2-P08
         property: outputPorts[].description
         type: library
-        metric: nullValues
-        mustBe: 0
+        metric: count
+        mustBe: 100
         unit: percent
         description: 100% of output ports have a description.
 
       - id: L2-P09
         property: outputPorts[].type
         type: library
-        metric: nullValues
-        mustBe: 0
+        metric: count
+        mustBe: 100
         unit: percent
         description: 100% of output ports have a type.
 
       - id: L2-P10
         property: inputPorts
         type: library
-        metric: rowCount
+        metric: count
         mustBeGreaterOrEqualTo: 1
         unit: rows
         description: >
@@ -335,16 +331,16 @@ levels:
       - id: L2-P11
         property: inputPorts[].name
         type: library
-        metric: nullValues
-        mustBe: 0
+        metric: count
+        mustBe: 100
         unit: percent
         description: 100% of input ports have a name.
 
       - id: L2-P12
         property: inputPorts[].contractId
         type: library
-        metric: nullValues
-        mustBe: 0
+        metric: count
+        mustBe: 100
         unit: percent
         description: 100% of input ports have a contractId.
 
@@ -362,21 +358,21 @@ levels:
       - id: L3-P01
         property: status
         type: library
-        metric: validValues
+        metric: valueOf
         mustBe: active
         description: Status must be active. Only active products can be governed.
 
       - id: L3-P02
         property: version
         type: library
-        metric: validValues
+        metric: valueOf
         mustBeGreaterOrEqualTo: v1.0.0
         description: Product version must be at least v1.0.0 (production).
 
       - id: L3-P03
         property: team.members[]
         type: library
-        metric: rowCount
+        metric: count
         arguments:
           where:
             field: role
@@ -388,7 +384,7 @@ levels:
       - id: L3-P04
         property: support[]
         type: library
-        metric: rowCount
+        metric: count
         mustBeGreaterOrEqualTo: 1
         unit: rows
         description: At least one support channel.
@@ -396,15 +392,15 @@ levels:
       - id: L3-P05
         property: inputPorts[].version
         type: library
-        metric: nullValues
-        mustBe: 0
+        metric: count
+        mustBe: 100
         unit: percent
         description: 100% of input ports are versioned.
 
       - id: L3-P06
         property: outputPorts[].contractId
         type: library
-        metric: rowCount
+        metric: count
         arguments:
           relatesTo: "[DataContract].status"
           where:
@@ -435,7 +431,7 @@ levels:
       - id: L4-P01
         property: apiVersion
         type: library
-        metric: validValues
+        metric: valueOf
         mustBeGreaterOrEqualTo: v1.1.0
         description: Must use ODPS v1.1.0 or later (introduces the context block).
 
@@ -444,7 +440,7 @@ levels:
       - id: L4-P02
         property: managementPorts[]
         type: library
-        metric: rowCount
+        metric: count
         arguments:
           where:
             field: content
@@ -456,7 +452,7 @@ levels:
       - id: L4-P03
         property: managementPorts[]
         type: library
-        metric: rowCount
+        metric: count
         arguments:
           where:
             field: content
@@ -468,7 +464,7 @@ levels:
       - id: L4-P04
         property: outputPorts[]
         type: library
-        metric: rowCount
+        metric: count
         arguments:
           having: sbom
         mustBeGreaterOrEqualTo: 1
@@ -478,15 +474,15 @@ levels:
       - id: L4-P05
         property: description.limitations
         type: library
-        metric: nullValues
-        mustBe: 0
+        metric: count
+        mustBe: 1
         unit: rows
         description: Limitations of the data product are documented.
 
       - id: L4-P06
         property: authoritativeDefinitions[]
         type: library
-        metric: rowCount
+        metric: count
         mustBeGreaterOrEqualTo: 1
         unit: rows
         description: At least one authoritative definition at root level.
@@ -494,7 +490,7 @@ levels:
       - id: L4-P07
         property: outputPorts[]
         type: library
-        metric: rowCount
+        metric: count
         arguments:
           having: inputContracts
         mustBeGreaterOrEqualTo: 50
@@ -506,8 +502,8 @@ levels:
       - id: L4-P08
         property: context.instructions
         type: library
-        metric: nullValues
-        mustBe: 0
+        metric: count
+        mustBe: 1
         unit: rows
         description: >
           Product-level context.instructions is present: natural-language
@@ -516,7 +512,7 @@ levels:
       - id: L4-P09
         property: context.constraints
         type: library
-        metric: rowCount
+        metric: count
         mustBeGreaterOrEqualTo: 1
         unit: rows
         description: >
@@ -526,7 +522,7 @@ levels:
       - id: L4-P10
         property: context.verifiedStatements
         type: library
-        metric: rowCount
+        metric: count
         mustBeGreaterOrEqualTo: 1
         unit: rows
         description: >
@@ -536,7 +532,7 @@ levels:
       - id: L4-P11
         property: outputPorts[].contractId
         type: library
-        metric: rowCount
+        metric: count
         arguments:
           relatesTo: "[DataContract].context"
           where:
@@ -564,7 +560,7 @@ levels:
       - id: L5-P01
         property: managementPorts[]
         type: library
-        metric: rowCount
+        metric: count
         arguments:
           where:
             field: content
@@ -576,7 +572,7 @@ levels:
       - id: L5-P02
         property: outputPorts[]
         type: library
-        metric: rowCount
+        metric: count
         arguments:
           having: sbom
         mustBe: 100
@@ -586,7 +582,7 @@ levels:
       - id: L5-P03
         property: outputPorts[]
         type: library
-        metric: rowCount
+        metric: count
         arguments:
           having: inputContracts
         mustBe: 100
@@ -596,21 +592,21 @@ levels:
       - id: L5-P04
         property: team.members[].dateIn
         type: library
-        metric: nullValues
-        mustBe: 0
+        metric: count
+        mustBe: 100
         unit: percent
         description: dateIn is tracked for all team members.
 
       - id: L5-P05
         property: team.members[].replacedByUsername
         type: library
-        metric: nullValues
+        metric: count
         arguments:
           relatesTo: team.members[].role
           where:
             field: team.members[].dateOut
             isNotNull: true
-        mustBe: 0
+        mustBe: 100
         unit: percent
         description: >
           When two or more team members share the same role and one has
@@ -620,7 +616,7 @@ levels:
       - id: L5-P06
         property: version
         type: library
-        metric: validValues
+        metric: valueOf
         mustBeGreaterThan: v1.0.0
         description: >
           Product version is greater than v1.0.0, proving at least one
@@ -629,15 +625,15 @@ levels:
       - id: L5-P07
         property: productCreatedTs
         type: library
-        metric: nullValues
-        mustBe: 0
+        metric: count
+        mustBe: 1
         unit: rows
         description: Product creation timestamp is set (ISO 8601 UTC).
 
       - id: L5-P08
         property: authoritativeDefinitions[]
         type: library
-        metric: rowCount
+        metric: count
         arguments:
           where:
             field: type
@@ -649,7 +645,7 @@ levels:
       - id: L5-P09
         property: authoritativeDefinitions[]
         type: library
-        metric: rowCount
+        metric: count
         arguments:
           where:
             field: type
@@ -663,8 +659,8 @@ levels:
       - id: L5-P10
         property: tenant
         type: library
-        metric: nullValues
-        mustBe: 0
+        metric: count
+        mustBe: 1
         unit: rows
         description: Tenant / organization is identified (not null, not empty).
 
@@ -673,7 +669,7 @@ levels:
       - id: L5-P11
         property: context.verifiedStatements
         type: library
-        metric: rowCount
+        metric: count
         mustBeGreaterOrEqualTo: 3
         unit: rows
         description: >
@@ -683,8 +679,8 @@ levels:
       - id: L5-P12
         property: context.verifiedStatements[].answer
         type: library
-        metric: nullValues
-        mustBeLessOrEqualTo: 50
+        metric: count
+        mustBeGreaterOrEqualTo: 50
         unit: percent
         description: >
           >= 50% of verified statements carry a curated answer that agents
@@ -693,8 +689,8 @@ levels:
       - id: L5-P13
         property: outputPorts[].context
         type: library
-        metric: nullValues
-        mustBe: 0
+        metric: count
+        mustBe: 100
         unit: percent
         description: >
           100% of output ports carry their own context block, scoping AI
@@ -703,7 +699,7 @@ levels:
       - id: L5-P14
         property: outputPorts[].contractId
         type: library
-        metric: rowCount
+        metric: count
         arguments:
           relatesTo: "[DataContract].context"
           where:

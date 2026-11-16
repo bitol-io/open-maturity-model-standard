@@ -31,7 +31,7 @@ policies:
   - id: POL-C01
     property: status
     type: library
-    metric: validValues
+    metric: valueOf
     arguments:
       caps:
         retired: 0
@@ -50,7 +50,7 @@ policies:
     name: statusCap
     property: status
     type: library
-    metric: validValues
+    metric: valueOf
     arguments:
       caps:
         retired: 0
@@ -67,7 +67,7 @@ policies:
     name: selfSourcing
     property: inputPorts
     type: library
-    metric: validValues
+    metric: valueOf
     arguments:
       where:
         field: name
@@ -89,7 +89,7 @@ policies:
 | `policies[].name`          | string         | Name                   | No       | Machine-friendly name.                                                                                                                                             | `statusCap`                |
 | `policies[].property`      | string         | Property               | Yes      | YAML property path to evaluate, in the artifact being assessed.                                                                                                     | `status`                   |
 | `policies[].type`          | string         | Type                   | No       | `library` (machine-evaluable) or `text` (auto-pass). Default is `library`.                                                                                          | `library`                  |
-| `policies[].metric`        | string         | Metric                 | No       | Metric name, from the same vocabulary the criteria use. See [Metrics](criteria.md#metrics).                                                                         | `validValues`              |
+| `policies[].metric`        | string         | Metric                 | No       | Metric name, from the same vocabulary the criteria use. See [Metrics](criteria.md#metrics).                                                                         | `valueOf`                  |
 | `policies[].arguments`     | object         | Arguments              | No       | Parameters for the metric. See [Arguments](criteria.md#arguments).                                                                                                   |                            |
 | `policies[].description`   | string         | Description            | No       | Human-readable explanation of the policy and its intent.                                                                                                            | `Status determines the…`   |
 | `policies[].tags`          | array          | Tags                   | No       | List of tags.                                                                                                                                                      | `[governance]`             |

@@ -2,12 +2,12 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 # POSITIVE TEST - this document MUST pass schema validation.
-# Rule: validValues reads a value, so ordering operators accept a version
+# Rule: valueOf reads a value, so ordering operators accept a version
 # string, and mustBe accepts the special value latest.
 # See docs/criteria.md#threshold-operators.
 
 kind: MaturityModel
-apiVersion: v0.2.0
+apiVersion: v0.2.1
 id: 0a1b2c3d-0000-4000-8000-000000000003
 name: version-thresholds
 status: draft
@@ -22,12 +22,12 @@ levels:
       - id: L1-C01
         property: apiVersion
         type: library
-        metric: validValues
+        metric: valueOf
         mustBeGreaterOrEqualTo: v3.2.0
         description: The contract uses ODCS v3.2.0 or newer.
       - id: L1-C02
         property: apiVersion
         type: library
-        metric: validValues
+        metric: valueOf
         mustBe: latest
         description: The contract tracks the latest ODCS release.

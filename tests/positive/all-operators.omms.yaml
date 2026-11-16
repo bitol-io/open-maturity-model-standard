@@ -2,12 +2,12 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 # POSITIVE TEST - this document MUST pass schema validation.
-# Rule: each of the eight threshold operators is accepted, with a number
-# (or a [min, max] pair for the range operators).
+# Rule: each of the ten threshold operators is accepted: the eight
+# comparisons with count, and mustBeIn / mustNotBeIn with valueOf.
 # See docs/criteria.md#threshold-operators.
 
 kind: MaturityModel
-apiVersion: v0.2.0
+apiVersion: v0.2.1
 id: 0a1b2c3d-0000-4000-8000-000000000004
 name: all-operators
 status: draft
@@ -20,48 +20,58 @@ levels:
       - id: L1-C01
         property: schema[]
         type: library
-        metric: rowCount
+        metric: count
         mustBe: 1
         unit: rows
       - id: L1-C02
         property: schema[]
         type: library
-        metric: rowCount
+        metric: count
         mustNotBe: 0
         unit: rows
       - id: L1-C03
         property: schema[]
         type: library
-        metric: rowCount
+        metric: count
         mustBeGreaterThan: 0
         unit: rows
       - id: L1-C04
         property: schema[]
         type: library
-        metric: rowCount
+        metric: count
         mustBeGreaterOrEqualTo: 1
         unit: rows
       - id: L1-C05
         property: schema[]
         type: library
-        metric: rowCount
+        metric: count
         mustBeLessThan: 10
         unit: rows
       - id: L1-C06
         property: schema[]
         type: library
-        metric: rowCount
+        metric: count
         mustBeLessOrEqualTo: 10
         unit: rows
       - id: L1-C07
         property: schema[]
         type: library
-        metric: rowCount
+        metric: count
         mustBeBetween: [1, 10]
         unit: rows
       - id: L1-C08
         property: schema[]
         type: library
-        metric: rowCount
+        metric: count
         mustNotBeBetween: [100, 200]
         unit: rows
+      - id: L1-C09
+        property: status
+        type: library
+        metric: valueOf
+        mustBeIn: [draft, active]
+      - id: L1-C10
+        property: status
+        type: library
+        metric: valueOf
+        mustNotBeIn: [retired]
