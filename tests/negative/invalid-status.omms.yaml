@@ -6,7 +6,7 @@
 # `deprecated`, `retired`. See docs/fundamentals.md#status-values.
 
 kind: MaturityModel
-apiVersion: v0.2.0
+apiVersion: v0.2.1
 id: 3c4d5e6f-7a8b-4c3d-ae4f-5a6b7c8d9e0f
 name: invalid-status
 status: obsolete
@@ -19,6 +19,6 @@ levels:
       - id: L1-C01
         property: kind
         type: library
-        metric: validValues
+        metric: valueOf
         mustBe: DataContract
         description: kind must equal DataContract.

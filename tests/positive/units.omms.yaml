@@ -1,0 +1,38 @@
+# Copyright 2026 The Bitol Contributors
+# SPDX-License-Identifier: Apache-2.0
+#
+# POSITIVE TEST - this document MUST pass schema validation.
+# Rule: count accepts unit rows (a number of items) and percent (their share).
+# See docs/criteria.md#units.
+
+kind: MaturityModel
+apiVersion: v0.2.1
+id: 0a1b2c3d-0000-4000-8000-000000000005
+name: units
+status: draft
+
+levels:
+  - level: 1
+    name: Basic
+    description: Minimum valid artifact.
+    criteria:
+      - id: L1-C01
+        property: schema[].properties[].description
+        type: library
+        metric: count
+        mustBeGreaterOrEqualTo: 5
+        unit: rows
+      - id: L1-C02
+        property: schema[].properties[].description
+        type: library
+        metric: count
+        mustBeGreaterThan: 80
+        unit: percent
+      - id: L1-C03
+        property: schema[].properties[].logicalType
+        type: library
+        metric: count
+        arguments:
+          in: [string, integer, number, boolean, date, object, array]
+        mustBe: 100
+        unit: percent

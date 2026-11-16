@@ -2,13 +2,13 @@
 # SPDX-License-Identifier: Apache-2.0
 
 kind: MaturityModel
-apiVersion: v0.2.0
+apiVersion: v0.2.1
 id: 9f3a2c17-8b4d-4e6a-a1f5-7d9c3e8b2a4f
 name: example-maturity-model
 version: 0.1.0
 status: draft
 description:
-  purpose: Example maturity model demonstrating OMMS v0.2.0 syntax.
+  purpose: Example maturity model demonstrating OMMS v0.2.1 syntax.
 tags:
   - example
 targetApplication: ODCS
@@ -19,7 +19,7 @@ policies:
     name: statusCap
     property: status
     type: library
-    metric: validValues
+    metric: valueOf
     arguments:
       caps:
         retired: 0
@@ -34,7 +34,7 @@ levels:
       - id: L1-C01
         property: kind
         type: library
-        metric: validValues
+        metric: valueOf
         mustBe: DataContract
         description: kind must equal DataContract.
 
@@ -45,7 +45,7 @@ levels:
       - id: L2-C01
         property: description.purpose
         type: library
-        metric: nullValues
-        mustBe: 0
+        metric: count
+        mustBe: 1
         unit: rows
         description: Purpose is documented.

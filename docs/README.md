@@ -16,9 +16,8 @@ yardsticks that say how complete, governed and operational an artifact is.
 
 OMMS evaluates Bitol artifacts: [ODCS](https://github.com/bitol-io/open-data-contract-standard) data
 contracts and [ODPS](https://github.com/bitol-io/open-data-product-standard) data products, and
-potentially others. It reuses the ODCS data quality vocabulary (`type`, `metric`, `arguments`,
-operators, `unit`) so a maturity model is written the same way a data quality rule is, and it makes
-`policies` a first-class concept for expressing the organizational rules that override or constrain
+potentially others. Its criteria use two metrics, `valueOf` to read a value and `count` to count
+items, and it makes `policies` a first-class concept for expressing the organizational rules that override or constrain
 an evaluation.
 
 OMMS defines the **syntax and semantics** of a maturity model. It deliberately does **not** prescribe
@@ -34,7 +33,7 @@ itself.
 ## Design goals
 
 - **Formal** — maturity models have a syntax tooling can rely on, so an evaluator written for one model can evaluate another.
-- **Measurable** — every criterion is factual and quantifiable, expressed with the ODCS data quality vocabulary rather than bespoke constructs.
+- **Measurable** — every criterion is factual and quantifiable: a property path, one of two metrics, and one threshold.
 - **Policy-aware** — organizational rules (a status cap, a sourcing convention) are core model behaviour and get first-class syntax, not a corner of `customProperties`.
 - **Non-prescriptive** — the standard fixes how a model is written, never how many levels it has or what they are called.
 
@@ -51,9 +50,9 @@ data product. It points *at* another document instead of describing data.
 - **The `description` object**, with the same `purpose`, `limitations` and `usage` fields.
 - **The extension structures**: `customProperties` and `authoritativeDefinitions`, with the same fields
   and the same recommended `type` values. See [Custom & Other Properties](custom-other-properties.md).
-- **The data quality vocabulary**: a criterion is written like an ODCS data quality rule, with `type`,
-  `metric`, `arguments`, a threshold operator and `unit`. OMMS adds one metric of its own, `validValues`.
-  See [Metrics](criteria.md#metrics).
+- **The shape of a rule**: a criterion has a `type`, a `metric`, `arguments`, a threshold operator such
+  as `mustBe` or `mustBeGreaterOrEqualTo`, and a `unit`, like an ODCS data quality rule. The metrics
+  themselves differ: see the table below.
 
 ### What is different
 
@@ -68,7 +67,8 @@ data product. It points *at* another document instead of describing data.
 | Ownership and operations | `team`, `roles`, `support`, `domain`, `tenant`, `servers`, creation timestamp | `team`, `support`, `domain`, `tenant`, creation timestamp | None: a model carries no team, support, domain, tenant, servers or timestamps |
 | Where a rule applies | `quality[]` nested in the schema object or property it checks, and measured against the **data** | n/a | Anywhere in the evaluated **document**, reached by a `property` path such as `schema[].properties[].description` |
 | Rule `type` | `text`, `library`, `sql`, `custom` | n/a | `library` or `text` only, with `text` passing automatically |
-| Metrics | `library` metrics `nullValues`, `missingValues`, `invalidValues`, `duplicateValues`, `rowCount`, plus SQL and vendor checks | n/a | Closed to four: `rowCount`, `nullValues` and `invalidValues` from ODCS, which count items, plus `validValues`, specific to OMMS, which reads a value |
+| Threshold | Optional | n/a | Exactly one operator on every `library` criterion; adds `mustBeIn` and `mustNotBeIn` |
+| Metrics | `library` metrics `nullValues`, `missingValues`, `invalidValues`, `duplicateValues`, `rowCount`, plus SQL and vendor checks | n/a | Two of its own: `valueOf` reads a value, `count` counts items |
 | Cross-document references | `dataProduct`, references | `contractId` on ports | `relatesTo: "[DataContract]…"` lets a criterion read a linked document |
 
 In short, ODCS and ODPS are **wide**: many optional sections side by side, any of which may be left
@@ -92,13 +92,13 @@ A complete, valid OMMS document. Every field below is explained in
 
 ```yaml
 kind: MaturityModel
-apiVersion: v0.2.0
+apiVersion: v0.2.1
 id: 9f3a2c17-8b4d-4e6a-a1f5-7d9c3e8b2a4f
 name: example-maturity-model
 version: 0.1.0
 status: draft
 description:
-  purpose: Example maturity model demonstrating OMMS v0.2.0 syntax.
+  purpose: Example maturity model demonstrating OMMS v0.2.1 syntax.
 tags:
   - example
 targetApplication: ODCS
@@ -109,7 +109,7 @@ policies:
     name: statusCap
     property: status
     type: library
-    metric: validValues
+    metric: valueOf
     arguments:
       caps:
         retired: 0
@@ -124,7 +124,7 @@ levels:
       - id: L1-C01
         property: kind
         type: library
-        metric: validValues
+        metric: valueOf
         mustBe: DataContract
         description: kind must equal DataContract.
 ```
@@ -136,11 +136,11 @@ levels:
 | [`schema/`](https://github.com/bitol-io/open-maturity-model-standard/tree/main/schema) | The versioned JSON Schemas. Files using the `.omms.yaml` extension are auto-detected as OMMS. |
 | [`docs/`](https://github.com/bitol-io/open-maturity-model-standard/tree/main/docs) | This documentation. |
 | [`docs/examples/`](examples/README.md) | Complete maturity models. |
+| [`tests/positive/`](https://github.com/bitol-io/open-maturity-model-standard/tree/main/tests/positive) | Minimal valid documents, one per permitted rule, the schema must accept. |
 | [`tests/negative/`](https://github.com/bitol-io/open-maturity-model-standard/tree/main/tests/negative) | Deliberately invalid documents the schema must reject. |
 | [Issues](https://github.com/bitol-io/open-maturity-model-standard/issues) | Questions the standard has not settled, tracked on GitHub. |
 
-OMMS is defined by [RFC-0037](https://github.com/bitol-io/tsc/blob/main/rfcs/0037-omms.md), filed with
-the Bitol TSC and not yet approved, and is part of the [Bitol](https://bitol.io) family of standards,
+OMMS is part of the [Bitol](https://bitol.io) family of standards,
 alongside [ODCS](https://github.com/bitol-io/open-data-contract-standard),
 [ODPS](https://github.com/bitol-io/open-data-product-standard) and
 [OORS](https://github.com/bitol-io/open-observability-results-standard).

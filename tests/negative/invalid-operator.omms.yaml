@@ -2,12 +2,12 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 # NEGATIVE TEST - this document MUST fail schema validation.
-# Violation: `mustBeGreaterThanOrEqualTo` is not one of the eight threshold
+# Violation: `mustBeGreaterThanOrEqualTo` is not one of the ten threshold
 # operators, whose names are `mustBeGreaterOrEqualTo` and friends.
 # See docs/criteria.md#threshold-operators.
 
 kind: MaturityModel
-apiVersion: v0.2.0
+apiVersion: v0.2.1
 id: 6f7a8b9c-0d1e-4f60-b17c-8d9e0f1a2b3c
 name: invalid-operator
 status: draft
@@ -20,7 +20,7 @@ levels:
       - id: L1-C01
         property: schema
         type: library
-        metric: rowCount
+        metric: count
         mustBeGreaterThanOrEqualTo: 1
         unit: rows
         description: At least one schema object.

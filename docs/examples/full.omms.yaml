@@ -1,8 +1,8 @@
 # Copyright 2026 The Bitol Contributors
 # SPDX-License-Identifier: Apache-2.0
 
-# Every OMMS v0.2.0 construct in one model: all eight threshold operators, all
-# four metrics, both units, every argument, `type: text`, and the shared
+# Every OMMS v0.2.1 construct in one model: all ten threshold operators, both
+# metrics, both units, every argument, `type: text`, and the shared
 # custom-property and authoritative-definition structures at several levels.
 #
 # The model is illustrative, not a maturity model to adopt: several criteria
@@ -10,14 +10,14 @@
 # construct it demonstrates.
 
 kind: MaturityModel
-apiVersion: v0.2.0
+apiVersion: v0.2.1
 id: 5b7e1d94-2c63-4f18-9a7e-3d5b8c1f6a20
 name: full-kitchen-sink-maturity-model
 version: 0.1.0
 status: draft
 description:
   purpose: >
-    Illustrative maturity model exercising every construct in OMMS v0.2.0.
+    Illustrative maturity model exercising every construct in OMMS v0.2.1.
   limitations: >
     Not a maturity model to adopt. Several thresholds are arbitrary, chosen
     to demonstrate an operator rather than to measure anything.
@@ -33,20 +33,20 @@ targetApiVersion: v1.1.0
 
 customProperties:
   - property: exampleOf
-    value: OMMS v0.2.0
+    value: OMMS v0.2.1
     description: Records that this model is illustrative only.
 
 authoritativeDefinitions:
   - type: canonicalUrl
-    url: https://github.com/bitol-io/tsc/blob/main/rfcs/0037-omms.md
-    description: RFC-0037, which defines the syntax this model uses.
+    url: https://github.com/bitol-io/open-maturity-model-standard
+    description: OMMS, the standard whose syntax this model uses.
 
 policies:
   - id: POL-P01
     name: statusCap
     property: status
     type: library
-    metric: validValues
+    metric: valueOf
     arguments:
       caps:
         retired: 0
@@ -62,7 +62,7 @@ policies:
     name: selfSourcing
     property: inputPorts
     type: library
-    metric: validValues
+    metric: valueOf
     arguments:
       where:
         field: name
@@ -84,14 +84,14 @@ levels:
       - id: L1-P01
         property: kind
         type: library
-        metric: validValues
+        metric: valueOf
         mustBe: DataProduct
         description: "`mustBe` with a string: kind must equal DataProduct."
 
       - id: L1-P02
         property: apiVersion
         type: library
-        metric: validValues
+        metric: valueOf
         mustBeGreaterOrEqualTo: v1.0.0
         description: >
           `mustBeGreaterOrEqualTo` with a version string: the standard version
@@ -100,7 +100,7 @@ levels:
       - id: L1-P03
         property: apiVersion
         type: library
-        metric: validValues
+        metric: valueOf
         mustBe: latest
         description: >
           `mustBe: latest` instructs the evaluator to resolve to the current
@@ -109,7 +109,7 @@ levels:
       - id: L1-P04
         property: outputPorts
         type: library
-        metric: rowCount
+        metric: count
         mustBeGreaterThan: 0
         unit: rows
         description: "`mustBeGreaterThan`: at least one output port is defined."
@@ -117,15 +117,15 @@ levels:
       - id: L1-P05
         property: name
         type: library
-        metric: nullValues
-        mustBe: 0
+        metric: count
+        mustBe: 1
         unit: rows
-        description: "`nullValues` with `unit: rows`: the product name is present."
+        description: "`count` on a single value: the product name is present."
 
       - id: L1-P06
         property: jsonSchemaValidation
         type: text
-        metric: rowCount
+        metric: count
         mustBe: 0
         unit: rows
         description: >
@@ -139,7 +139,7 @@ levels:
       - id: L2-P01
         property: tags
         type: library
-        metric: rowCount
+        metric: count
         mustBeGreaterOrEqualTo: 1
         unit: rows
         description: At least one tag.
@@ -147,24 +147,24 @@ levels:
       - id: L2-P02
         property: outputPorts[].description
         type: library
-        metric: nullValues
-        mustBeLessThan: 20
+        metric: count
+        mustBeGreaterThan: 80
         unit: percent
         description: >
-          `unit: percent`: fewer than 20% of output ports lack a description.
+          `unit: percent`: more than 80% of output ports have a description.
 
       - id: L2-P03
-        property: description.purpose
+        property: outputPorts[]
         type: library
-        metric: nullValues
-        mustBeLessOrEqualTo: 0
+        metric: count
+        mustBeLessOrEqualTo: 20
         unit: rows
-        description: "`mustBeLessOrEqualTo`: the purpose is documented."
+        description: "`mustBeLessOrEqualTo`: no more than 20 output ports."
 
       - id: L2-P04
         property: team.members[].role
         type: library
-        metric: rowCount
+        metric: count
         mustNotBe: 0
         unit: rows
         description: "`mustNotBe`: the role count is not zero."
@@ -176,7 +176,7 @@ levels:
       - id: L3-P01
         property: team.members[]
         type: library
-        metric: rowCount
+        metric: count
         arguments:
           having: role
         mustBeGreaterOrEqualTo: 1
@@ -187,7 +187,7 @@ levels:
       - id: L3-P02
         property: authoritativeDefinitions
         type: library
-        metric: rowCount
+        metric: count
         arguments:
           where:
             field: type
@@ -201,13 +201,13 @@ levels:
       - id: L3-P03
         property: team.members[].replacedByUsername
         type: library
-        metric: nullValues
+        metric: count
         arguments:
           relatesTo: team.members[].role
           where:
             field: team.members[].dateOut
             isNotNull: true
-        mustBe: 0
+        mustBe: 100
         unit: percent
         description: >
           `arguments.where.isNotNull` with a `relatesTo` resolved inside the
@@ -217,7 +217,7 @@ levels:
       - id: L3-P04
         property: outputPorts[].contractId
         type: library
-        metric: rowCount
+        metric: count
         arguments:
           relatesTo: "[DataContract].status"
           where:
@@ -236,7 +236,7 @@ levels:
       - id: L4-P01
         property: outputPorts[]
         type: library
-        metric: rowCount
+        metric: count
         arguments:
           having: sbom
         mustBeGreaterOrEqualTo: 1
@@ -246,7 +246,7 @@ levels:
       - id: L4-P02
         property: managementPorts[]
         type: library
-        metric: rowCount
+        metric: count
         arguments:
           anyOf: [content, description]
         mustBeGreaterOrEqualTo: 1
@@ -258,10 +258,10 @@ levels:
       - id: L4-P03
         property: quality[].dimension
         type: library
-        metric: rowCount
+        metric: count
         arguments:
           distinct: true
-          validValues:
+          in:
             - accuracy
             - completeness
             - conformity
@@ -272,32 +272,22 @@ levels:
         mustBeGreaterOrEqualTo: 3
         unit: rows
         description: >
-          `arguments.distinct` with `validValues`: at least 3 of the 7 Data QoS
+          `arguments.distinct` with `arguments.in`: at least 3 of the 7 Data QoS
           dimensions are represented across all quality rules.
 
       - id: L4-P04
         property: status
         type: library
-        metric: invalidValues
-        arguments:
-          validValues:
-            - proposed
-            - draft
-            - active
-            - deprecated
-            - retired
-        mustBe: 0
-        unit: rows
-        description: >
-          `invalidValues` with `arguments.validValues`: no status outside the
-          permitted set.
+        metric: valueOf
+        mustBeIn: [proposed, draft, active, deprecated, retired]
+        description: "`mustBeIn`: the status is one of the ODPS values."
 
       - id: L4-P05
         property: quality[].dimension
         type: library
-        metric: rowCount
+        metric: count
         arguments:
-          validValues:
+          in:
             - completeness
         mustBeBetween: [1, 10]
         unit: rows
@@ -310,7 +300,7 @@ levels:
       - id: L5-P01
         property: outputPorts[].quality
         type: library
-        metric: rowCount
+        metric: count
         mustNotBeBetween: [3, 7]
         unit: rows
         description: "`mustNotBeBetween`: an exclusive range."
@@ -318,7 +308,7 @@ levels:
       - id: L5-P02
         property: outputPorts[].contractId
         type: library
-        metric: rowCount
+        metric: count
         arguments:
           having: inputContracts
         mustBeGreaterOrEqualTo: 50
@@ -329,13 +319,6 @@ levels:
       - id: L5-P03
         property: pricing
         type: library
-        metric: validValues
-        validValues:
-          - free
-          - charged
-        mustBeGreaterOrEqualTo: 1
-        unit: rows
-        description: >
-          Criterion-level `validValues`, the spelling four ODCS criteria use.
-          RFC-0037 places `validValues` inside `arguments`; both are accepted
-          pending the open issue on placement.
+        metric: valueOf
+        mustNotBeIn: [unknown, tbd]
+        description: "`mustNotBeIn`: the pricing model is not left undecided."

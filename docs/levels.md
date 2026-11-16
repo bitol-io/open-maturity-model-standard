@@ -37,7 +37,7 @@ levels:
       - id: L1-C01
         property: kind
         type: library
-        metric: validValues
+        metric: valueOf
         mustBe: DataContract
         description: kind must equal DataContract.
 ```
@@ -56,7 +56,7 @@ levels:
       - id: L1-C01
         property: kind
         type: library
-        metric: validValues
+        metric: valueOf
         mustBe: DataContract
         description: kind must equal DataContract.
 
@@ -67,8 +67,8 @@ levels:
       - id: L2-C01
         property: description.purpose
         type: library
-        metric: nullValues
-        mustBe: 0
+        metric: count
+        mustBe: 1
         unit: rows
         description: Purpose is documented.
 ```
@@ -115,20 +115,20 @@ Criteria may be repeated across levels with a tighter threshold, which is how a 
 of the same, in better shape" without inventing new checks:
 
 ```yaml
-# Level 2 — at least some of the properties are described
+# Level 2 — at least half of the properties are described
 - id: L2-C04
   property: schema[].properties[].description
   type: library
-  metric: nullValues
-  mustBeLessThan: 50
+  metric: count
+  mustBeGreaterThan: 50
   unit: percent
 
 # Level 5 — every property is described
 - id: L5-C04
   property: schema[].properties[].description
   type: library
-  metric: nullValues
-  mustBe: 0
+  metric: count
+  mustBe: 100
   unit: percent
 ```
 

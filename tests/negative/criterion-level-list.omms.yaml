@@ -1,0 +1,26 @@
+# Copyright 2026 The Bitol Contributors
+# SPDX-License-Identifier: Apache-2.0
+#
+# NEGATIVE TEST - this document MUST fail schema validation.
+# Violation: a value list never sits directly on the criterion. Use
+# `mustBeIn` with `valueOf`, or `arguments.in` with `count`.
+# See docs/criteria.md#arguments.
+
+kind: MaturityModel
+apiVersion: v0.2.1
+id: 6f7a8b9c-0d1e-4f2a-8b3c-4d5e6f7a8b06
+name: criterion-level-list
+status: draft
+
+levels:
+  - level: 1
+    name: Basic
+    description: Minimum valid artifact.
+    criteria:
+      - id: L1-C01
+        property: schema[].properties[].logicalType
+        type: library
+        metric: count
+        validValues: [string, integer]
+        mustBe: 100
+        unit: percent

@@ -1,0 +1,25 @@
+# Copyright 2026 The Bitol Contributors
+# SPDX-License-Identifier: Apache-2.0
+#
+# NEGATIVE TEST - this document MUST fail schema validation.
+# Violation: `mustBeIn` compares a value, so it goes with `valueOf`, not
+# `count`. To count the items in a list, use the `in` argument.
+# See docs/criteria.md#threshold-operators.
+
+kind: MaturityModel
+apiVersion: v0.2.1
+id: 6f7a8b9c-0d1e-4f2a-8b3c-4d5e6f7a8b05
+name: mustbein-with-count
+status: draft
+
+levels:
+  - level: 1
+    name: Basic
+    description: Minimum valid artifact.
+    criteria:
+      - id: L1-C01
+        property: quality[].type
+        type: library
+        metric: count
+        mustBeIn: [library, sql]
+        unit: percent

@@ -26,7 +26,7 @@ Thanks for your interest and for taking the time to come here! ❤️
 This standard describes a structure for a **maturity model**: the yardstick that says how complete,
 governed and operational a Bitol artifact, such as an [ODCS](https://github.com/bitol-io/open-data-contract-standard)
 data contract or an [ODPS](https://github.com/bitol-io/open-data-product-standard) data product, is.
-Its current version is v0.2.0. It is available under the Apache 2.0 license. Contributions are welcome!
+Its current version is v0.2.1. It is available under the Apache 2.0 license. Contributions are welcome!
 
 ## Discover the open standard
 
@@ -53,9 +53,7 @@ Check out the [resources](resources.md) page.
 
 ## Contributing to the project
 
-Check out the [CONTRIBUTING](CONTRIBUTING.md) page. OMMS is defined by
-[RFC-0037](https://github.com/bitol-io/tsc/blob/main/rfcs/0037-omms.md), filed with the Bitol TSC and
-not yet approved.
+Check out the [CONTRIBUTING](CONTRIBUTING.md) page.
 
 ## License
 
@@ -82,5 +80,5 @@ If you need to cite this standard, you can use the following BibTeX entry:
 The official media (fka mime) type is:
 
 ```
-application/omms+yaml;version=0.2.0
+application/omms+yaml;version=0.2.1
 ```

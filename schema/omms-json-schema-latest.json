@@ -20,8 +20,8 @@
     },
     "apiVersion": {
       "type": "string",
-      "default": "v0.2.0",
-      "description": "Version of the OMMS schema used. Indicates the version of the standard, e.g., `v0.2.0`."
+      "default": "v0.2.1",
+      "description": "Version of the OMMS schema used. Indicates the version of the standard, e.g., `v0.2.1`."
     },
     "id": {
       "type": "string",
@@ -229,7 +229,7 @@
     },
     "Arguments": {
       "type": "object",
-      "description": "Parameters for the metric, aligning with the ODCS data quality vocabulary. The known keys are listed here; additional metric-specific parameters are permitted.",
+      "description": "Parameters for the metric. The known keys are listed here; additional metric-specific parameters are permitted.",
       "properties": {
         "having": {
           "description": "Items must have these fields present. A single field name or a list of them.",
@@ -263,11 +263,15 @@
           "type": "string",
           "description": "Dependency reference. Bracket notation (`[DataContract]`, `[DataProduct]`) resolves against a linked artifact of that kind; a plain path resolves within the document being evaluated."
         },
-        "validValues": {
+        "in": {
           "type": "array",
-          "description": "Restrict to values in this list.",
+          "description": "With `count`: count only the items whose value is in this list.",
           "items": {
-            "type": "string"
+            "type": [
+              "string",
+              "number",
+              "boolean"
+            ]
           }
         },
         "caps": {
@@ -321,10 +325,8 @@
         "metric": {
           "type": "string",
           "enum": [
-            "rowCount",
-            "nullValues",
-            "invalidValues",
-            "validValues"
+            "valueOf",
+            "count"
           ],
           "description": "Metric name, from the same vocabulary the criteria use."
         },
@@ -367,6 +369,30 @@
         },
         "mustNotBeBetween": {
           "description": "Threshold operator, as on a criterion."
+        },
+        "mustBeIn": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": [
+              "string",
+              "number",
+              "boolean"
+            ]
+          },
+          "description": "Threshold operator: the value must be one of these. Used with `valueOf`."
+        },
+        "mustNotBeIn": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": [
+              "string",
+              "number",
+              "boolean"
+            ]
+          },
+          "description": "Threshold operator: the value must be none of these. Used with `valueOf`."
         }
       }
     },
@@ -427,7 +453,7 @@
         "id",
         "property"
       ],
-      "description": "A measurable check within a level, expressed in the ODCS data quality vocabulary: a property path, a metric, optional arguments, and a threshold operator.",
+      "description": "A measurable check within a level: a property path, a metric (`valueOf` or `count`), optional arguments, and one threshold operator.",
       "properties": {
         "id": {
           "type": "string",
@@ -456,12 +482,10 @@
         "metric": {
           "type": "string",
           "enum": [
-            "rowCount",
-            "nullValues",
-            "invalidValues",
-            "validValues"
+            "valueOf",
+            "count"
           ],
-          "description": "Metric name. Required when `type` is `library`. OMMS reuses the ODCS library metrics and introduces none of its own."
+          "description": "Metric name. `valueOf` reads the value at `property` and compares it to the threshold. `count` counts the items present at `property` (the share of them with `unit: percent`). Required when `type` is `library`."
         },
         "arguments": {
           "$ref": "#/$defs/Arguments"
@@ -477,13 +501,6 @@
         "description": {
           "type": "string",
           "description": "Human-readable explanation of the criterion, and of what a passing artifact looks like."
-        },
-        "validValues": {
-          "type": "array",
-          "description": "Restrict to values in this list. Tolerated at criterion level for compatibility with existing models; RFC-0037 places `validValues` inside `arguments`. See https://github.com/bitol-io/open-maturity-model-standard/issues/5.",
-          "items": {
-            "type": "string"
-          }
         },
         "tags": {
           "$ref": "#/$defs/Tags"
@@ -555,6 +572,30 @@
           "items": {
             "type": "number"
           }
+        },
+        "mustBeIn": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": [
+              "string",
+              "number",
+              "boolean"
+            ]
+          },
+          "description": "Threshold operator: the value must be one of these. Used with `valueOf`."
+        },
+        "mustNotBeIn": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": [
+              "string",
+              "number",
+              "boolean"
+            ]
+          },
+          "description": "Threshold operator: the value must be none of these. Used with `valueOf`."
         }
       },
       "allOf": [
@@ -574,8 +615,105 @@
           "then": {
             "required": [
               "metric"
+            ],
+            "oneOf": [
+              {
+                "required": [
+                  "mustBe"
+                ]
+              },
+              {
+                "required": [
+                  "mustNotBe"
+                ]
+              },
+              {
+                "required": [
+                  "mustBeGreaterThan"
+                ]
+              },
+              {
+                "required": [
+                  "mustBeGreaterOrEqualTo"
+                ]
+              },
+              {
+                "required": [
+                  "mustBeLessThan"
+                ]
+              },
+              {
+                "required": [
+                  "mustBeLessOrEqualTo"
+                ]
+              },
+              {
+                "required": [
+                  "mustBeBetween"
+                ]
+              },
+              {
+                "required": [
+                  "mustNotBeBetween"
+                ]
+              },
+              {
+                "required": [
+                  "mustBeIn"
+                ]
+              },
+              {
+                "required": [
+                  "mustNotBeIn"
+                ]
+              }
             ]
-          }
+          },
+          "description": "A `library` criterion names a metric and exactly one threshold operator."
+        },
+        {
+          "if": {
+            "properties": {
+              "metric": {
+                "const": "valueOf"
+              }
+            },
+            "required": [
+              "metric"
+            ]
+          },
+          "then": {
+            "not": {
+              "required": [
+                "unit"
+              ]
+            }
+          },
+          "description": "`valueOf` reads a value, not a count, so it takes no `unit`."
+        },
+        {
+          "if": {
+            "anyOf": [
+              {
+                "required": [
+                  "mustBeIn"
+                ]
+              },
+              {
+                "required": [
+                  "mustNotBeIn"
+                ]
+              }
+            ]
+          },
+          "then": {
+            "properties": {
+              "metric": {
+                "const": "valueOf"
+              }
+            }
+          },
+          "description": "`mustBeIn` and `mustNotBeIn` compare a value, so they go with `valueOf`."
         }
       ]
     }

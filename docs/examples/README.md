@@ -20,7 +20,7 @@ models, the only maturity models in existence, where Level 4 is **AI-Ready**.
 | Example | File | What it is |
 | ------- | ---- | ---------- |
 | Minimal — only required fields | [`minimal.omms.yaml`](minimal.omms.yaml) | One policy, two levels, one criterion each. The smallest document that validates. |
-| Full — every construct | [`full.omms.yaml`](full.omms.yaml) | All eight threshold operators, all four metrics, both units, every argument, `type: text`, and both shared structures at several levels. Illustrative, not adoptable. |
+| Full — every construct | [`full.omms.yaml`](full.omms.yaml) | All ten threshold operators, both metrics, both units, every argument, `type: text`, and both shared structures at several levels. Illustrative, not adoptable. |
 | ODCS — data contract maturity | [`odcs-maturity-model.omms.yaml`](odcs-maturity-model.omms.yaml) | Model v2.0.0 for ODCS contracts, targeting ODCS v3.2.0. Five levels: Structural, Descriptive, Governed, **AI-Ready**, Optimized. |
 | ODPS — data product maturity | [`odps-maturity-model.omms.yaml`](odps-maturity-model.omms.yaml) | Model v2.0.0 for ODPS data products, targeting ODPS v1.1.0. Five levels: Structural, Descriptive, Governed, **AI-Ready**, Optimized. |
 
@@ -54,5 +54,5 @@ carries no quality dimension of its own (quality is delegated to the contracts i
 ODPS model asks about observability, dependencies and context instead, and a criterion in one model
 often has no counterpart in the other.
 
-> **Note:** a model version (`version: 2.0.0`) is not an OMMS version. Both models are written in the
-> OMMS **v0.2.0** syntax while being the second major version of the model itself.
+> **Note:** a model version (`version: 2.1.0`) is not an OMMS version. Both models are written in the
+> OMMS **v0.2.1** syntax while being the second major version of the model itself.

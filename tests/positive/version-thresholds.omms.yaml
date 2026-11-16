@@ -1,0 +1,33 @@
+# Copyright 2026 The Bitol Contributors
+# SPDX-License-Identifier: Apache-2.0
+#
+# POSITIVE TEST - this document MUST pass schema validation.
+# Rule: valueOf reads a value, so ordering operators accept a version
+# string, and mustBe accepts the special value latest.
+# See docs/criteria.md#threshold-operators.
+
+kind: MaturityModel
+apiVersion: v0.2.1
+id: 0a1b2c3d-0000-4000-8000-000000000003
+name: version-thresholds
+status: draft
+targetApplication: ODCS
+targetApiVersion: v3.2.0
+
+levels:
+  - level: 1
+    name: Basic
+    description: Minimum valid artifact.
+    criteria:
+      - id: L1-C01
+        property: apiVersion
+        type: library
+        metric: valueOf
+        mustBeGreaterOrEqualTo: v3.2.0
+        description: The contract uses ODCS v3.2.0 or newer.
+      - id: L1-C02
+        property: apiVersion
+        type: library
+        metric: valueOf
+        mustBe: latest
+        description: The contract tracks the latest ODCS release.

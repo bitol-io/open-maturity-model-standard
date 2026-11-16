@@ -2,10 +2,17 @@
 # SPDX-License-Identifier: Apache-2.0
 
 # =============================================================================
-# ODCS Data Contract Maturity Model — v2.0.0
-# Using Open Maturity Model Standard (OMMS) v0.2.0
+# ODCS Data Contract Maturity Model — v2.1.0
+# Using Open Maturity Model Standard (OMMS) v0.2.1
 # Targets ODCS v3.2.0 (RFC-0038 `context` block)
 # =============================================================================
+#
+# Changes from model v2.0.0:
+#
+#   Rewritten for OMMS v0.2.1, which replaces the ODCS data quality metrics
+#   with two of its own: `valueOf` (read a value) and `count` (count the
+#   items present, or their share with `unit: percent`). Every check means
+#   what it meant in v2.0.0; criteria IDs are unchanged.
 #
 # Changes from model v1.0.0 (file odcs-maturity-model-v0.2.0.yaml):
 #
@@ -28,10 +35,10 @@
 #   between v1.0.0 and v2.0.0 by id.
 # =============================================================================
 kind: MaturityModel
-apiVersion: v0.2.0
+apiVersion: v0.2.1
 id: 7a2f9c13-4e81-4b6a-a3d2-8f1e5d097b4c
 name: odcs-data-contract-maturity-model
-version: 2.0.0
+version: 2.1.0
 status: active
 description:
   purpose: >
@@ -94,7 +101,7 @@ policies:
     name: Status gate
     property: status
     type: library
-    metric: invalidValues
+    metric: valueOf
     arguments:
       caps:
         retired: 0
@@ -133,55 +140,52 @@ levels:
       - id: L1-C01
         property: apiVersion
         type: library
-        metric: validValues
+        metric: valueOf
         mustBeGreaterOrEqualTo: v2.0.0
         description: ODCS standard version is at least v2.0.0.
 
       - id: L1-C02
         property: version
         type: library
-        metric: validValues
+        metric: count
+        mustBe: 1
+        unit: rows
         description: Contract version is present and follows SemVer format (any value).
 
       - id: L1-C03
         property: status
         type: library
-        metric: invalidValues
-        validValues:
-          - proposed
-          - draft
-          - active
-          - deprecated
-          - retired
+        metric: valueOf
+        mustBeIn: [proposed, draft, active, deprecated, retired]
         description: Status field is present and contains a valid ODCS status value.
 
       - id: L1-C04
         property: kind
         type: library
-        metric: validValues
+        metric: valueOf
         mustBe: DataContract
         description: kind must equal DataContract.
 
       - id: L1-C05
         property: id
         type: library
-        metric: nullValues
-        mustBe: 0
+        metric: count
+        mustBe: 1
         unit: rows
         description: id must be present (not null, not empty).
 
       - id: L1-C06
         property: name
         type: library
-        metric: nullValues
-        mustBe: 0
+        metric: count
+        mustBe: 1
         unit: rows
         description: name must be present (not null, not empty).
 
       - id: L1-C07
         property: schema
         type: library
-        metric: rowCount
+        metric: count
         mustBeGreaterOrEqualTo: 1
         unit: rows
         description: At least one schema object is defined.
@@ -189,43 +193,44 @@ levels:
       - id: L1-C08
         property: schema[].name
         type: library
-        metric: nullValues
-        mustBe: 0
+        metric: count
+        mustBe: 100
         unit: percent
-        description: Every schema object has a name (0% null).
+        description: Every schema object has a name (100% present).
 
       - id: L1-C09
         property: schema[].properties[].name
         type: library
-        metric: nullValues
-        mustBe: 0
+        metric: count
+        mustBe: 100
         unit: percent
-        description: Every property has a name (0% null).
+        description: Every property has a name (100% present).
 
       - id: L1-C10
         property: schema[].properties[].logicalType
         type: library
-        metric: invalidValues
-        validValues:
-          - string
-          - integer
-          - number
-          - date
-          - timestamp
-          - time
-          - boolean
-          - object
-          - array
-          - vector
-          - map
-        mustBe: 0
+        metric: count
+        arguments:
+          in:
+            - string
+            - integer
+            - number
+            - date
+            - timestamp
+            - time
+            - boolean
+            - object
+            - array
+            - vector
+            - map
+        mustBe: 100
         unit: percent
         description: Every property has a valid logicalType (0% invalid).
 
       - id: L1-C11
         property: jsonSchemaValidation
         type: text
-        metric: rowCount
+        metric: count
         mustBe: 0
         unit: rows
         description: YAML passes ODCS JSON Schema validation with 0 errors.
@@ -244,60 +249,60 @@ levels:
       - id: L2-C01
         property: apiVersion
         type: library
-        metric: validValues
+        metric: valueOf
         mustBeGreaterOrEqualTo: v3.0.0
         description: ODCS standard version is at least v3.0.0.
 
       - id: L2-C02
         property: version
         type: library
-        metric: validValues
+        metric: valueOf
         mustBeGreaterOrEqualTo: v0.8.0
         description: Contract version is at least v0.8.0 (approaching production readiness).
 
       - id: L2-C03
         property: status
         type: library
-        metric: validValues
+        metric: valueOf
         mustBe: active
         description: Contract status must be active.
 
       - id: L2-C04
         property: schema[].properties[].description
         type: library
-        metric: nullValues
-        mustBeLessThan: 20
+        metric: count
+        mustBeGreaterThan: 80
         unit: percent
-        description: ">= 80% of properties have descriptions (< 20% null)."
+        description: ">= 80% of properties have descriptions."
 
       - id: L2-C05
         property: schema[].properties[].classification
         type: library
-        metric: nullValues
-        mustBeLessOrEqualTo: 50
+        metric: count
+        mustBeGreaterOrEqualTo: 50
         unit: percent
         description: ">= 50% of properties have a classification value."
 
       - id: L2-C06
         property: description.purpose
         type: library
-        metric: nullValues
-        mustBe: 0
+        metric: count
+        mustBe: 1
         unit: rows
         description: Purpose of the dataset is documented (not null, not empty).
 
       - id: L2-C07
         property: domain
         type: library
-        metric: nullValues
-        mustBe: 0
+        metric: count
+        mustBe: 1
         unit: rows
         description: Domain is specified.
 
       - id: L2-C08
         property: tags
         type: library
-        metric: rowCount
+        metric: count
         mustBeGreaterOrEqualTo: 1
         unit: rows
         description: At least one tag at contract level.
@@ -305,34 +310,34 @@ levels:
       - id: L2-C09
         property: schema[].description
         type: library
-        metric: nullValues
-        mustBe: 0
+        metric: count
+        mustBe: 100
         unit: percent
-        description: Every schema object has a description (0% null).
+        description: Every schema object has a description (100% present).
 
       - id: L2-C10
         property: schema[].properties[].logicalTypeOptions
         type: library
-        metric: nullValues
-        mustBeLessOrEqualTo: 50
+        metric: count
+        mustBeGreaterOrEqualTo: 50
         unit: percent
         description: ">= 50% of properties define logicalTypeOptions."
 
       - id: L2-C11
         property: schema[].properties[].examples
         type: library
-        metric: nullValues
-        mustBeLessOrEqualTo: 50
+        metric: count
+        mustBeGreaterOrEqualTo: 50
         unit: percent
         description: ">= 50% of properties include example values."
 
       - id: L2-C12
         property: schema[].properties[].businessName
         type: library
-        metric: nullValues
-        mustBeLessOrEqualTo: 70
+        metric: count
+        mustBeGreaterOrEqualTo: 30
         unit: percent
-        description: ">= 30% of properties have a businessName (< 70% null)."
+        description: ">= 30% of properties have a businessName."
 
   # ===========================================================================
   # LEVEL 3 — GOVERNED (Operationally Complete, First Check in Place)
@@ -350,29 +355,29 @@ levels:
       - id: L3-C01
         property: apiVersion
         type: library
-        metric: validValues
+        metric: valueOf
         mustBeGreaterOrEqualTo: v3.1.0
         description: ODCS standard version must be at least v3.1.0.
 
       - id: L3-C02
         property: version
         type: library
-        metric: validValues
+        metric: valueOf
         mustBeGreaterOrEqualTo: v1.0.0
         description: Contract version must be at least v1.0.0 (production).
 
       - id: L3-C03
         property: schema[].properties[].classification
         type: library
-        metric: nullValues
-        mustBe: 0
+        metric: count
+        mustBe: 100
         unit: percent
         description: 100% of properties have a classification.
 
       - id: L3-C04
         property: team.members
         type: library
-        metric: rowCount
+        metric: count
         mustBeGreaterOrEqualTo: 1
         unit: rows
         description: At least one team member with username and role.
@@ -380,7 +385,7 @@ levels:
       - id: L3-C05
         property: roles
         type: library
-        metric: rowCount
+        metric: count
         mustBeGreaterOrEqualTo: 1
         unit: rows
         description: At least one role with name and description.
@@ -388,7 +393,7 @@ levels:
       - id: L3-C06
         property: support
         type: library
-        metric: rowCount
+        metric: count
         mustBeGreaterOrEqualTo: 1
         unit: rows
         description: At least one support channel with channel + tool.
@@ -396,7 +401,7 @@ levels:
       - id: L3-C07
         property: slaProperties
         type: library
-        metric: rowCount
+        metric: count
         mustBeGreaterOrEqualTo: 1
         unit: rows
         description: At least one SLA property with property, value, and unit.
@@ -404,7 +409,7 @@ levels:
       - id: L3-C08
         property: servers
         type: library
-        metric: rowCount
+        metric: count
         mustBeGreaterOrEqualTo: 1
         unit: rows
         description: At least one server with type and environment.
@@ -412,7 +417,7 @@ levels:
       - id: L3-C09
         property: authoritativeDefinitions
         type: library
-        metric: rowCount
+        metric: count
         mustBeGreaterOrEqualTo: 1
         unit: rows
         description: At least one authoritative definition (url + type).
@@ -420,7 +425,7 @@ levels:
       - id: L3-C10
         property: authoritativeDefinitions[]
         type: library
-        metric: rowCount
+        metric: count
         mustBeGreaterOrEqualTo: 1
         unit: rows
         arguments:
@@ -434,16 +439,16 @@ levels:
       - id: L3-C11
         property: description.limitations
         type: library
-        metric: nullValues
-        mustBe: 0
+        metric: count
+        mustBe: 1
         unit: rows
         description: Limitations of the data are documented.
 
       - id: L3-C12
         property: description.usage
         type: library
-        metric: nullValues
-        mustBe: 0
+        metric: count
+        mustBe: 1
         unit: rows
         description: Usage guidance is documented.
 
@@ -452,7 +457,7 @@ levels:
       - id: L3-C13
         property: schema[].quality[]
         type: library
-        metric: rowCount
+        metric: count
         mustBeGreaterOrEqualTo: 1
         unit: rows
         description: At least one quality rule at object level (schema object or root).
@@ -460,20 +465,21 @@ levels:
       - id: L3-C14
         property: quality[].type
         type: library
-        metric: invalidValues
-        validValues:
-          - text
-          - library
-          - sql
-          - custom
-        mustBe: 0
+        metric: count
+        arguments:
+          in:
+            - text
+            - library
+            - sql
+            - custom
+        mustBe: 100
         unit: percent
         description: 100% of quality rules use a valid type.
 
       - id: L3-C15
         property: quality[].type
         type: library
-        metric: rowCount
+        metric: count
         mustBeGreaterOrEqualTo: 1
         unit: rows
         arguments:
@@ -486,7 +492,7 @@ levels:
       - id: L3-C16
         property: schema[].properties[]
         type: library
-        metric: rowCount
+        metric: count
         mustBeGreaterOrEqualTo: 1
         unit: rows
         arguments:
@@ -512,7 +518,7 @@ levels:
       - id: L4-C01
         property: apiVersion
         type: library
-        metric: validValues
+        metric: valueOf
         mustBeGreaterOrEqualTo: v3.2.0
         description: Must use ODCS v3.2.0 or later (introduces the context block).
 
@@ -521,7 +527,7 @@ levels:
       - id: L4-C02
         property: schema[].properties[]
         type: library
-        metric: rowCount
+        metric: count
         mustBeGreaterOrEqualTo: 30
         unit: percent
         arguments:
@@ -531,31 +537,31 @@ levels:
       - id: L4-C03
         property: schema[].properties[].required
         type: library
-        metric: nullValues
-        mustBeLessOrEqualTo: 50
+        metric: count
+        mustBeGreaterOrEqualTo: 50
         unit: percent
         description: ">= 50% of properties have the required flag explicitly set."
 
       - id: L4-C04
         property: quality[].dimension
         type: library
-        metric: nullValues
-        mustBeLessOrEqualTo: 50
+        metric: count
+        mustBeGreaterOrEqualTo: 50
         unit: percent
         description: ">= 50% of quality rules specify a dimension."
 
       - id: L4-C05
         property: quality[].severity
         type: library
-        metric: nullValues
-        mustBeLessOrEqualTo: 50
+        metric: count
+        mustBeGreaterOrEqualTo: 50
         unit: percent
         description: ">= 50% of quality rules specify a severity."
 
       - id: L4-C06
         property: quality[]
         type: library
-        metric: rowCount
+        metric: count
         mustBeGreaterOrEqualTo: 1
         unit: rows
         arguments:
@@ -567,7 +573,7 @@ levels:
       - id: L4-C07
         property: schema[].relationships
         type: text
-        metric: rowCount
+        metric: count
         description: >
           Relationships defined between properties (if foreign keys exist).
           Scores as met when no foreign keys apply.
@@ -575,7 +581,7 @@ levels:
       - id: L4-C08
         property: slaProperties[]
         type: library
-        metric: rowCount
+        metric: count
         mustBeGreaterOrEqualTo: 1
         unit: rows
         arguments:
@@ -589,8 +595,8 @@ levels:
       - id: L4-C09
         property: context.instructions
         type: library
-        metric: nullValues
-        mustBe: 0
+        metric: count
+        mustBe: 1
         unit: rows
         description: >
           Root-level context.instructions is present: natural-language
@@ -600,7 +606,7 @@ levels:
       - id: L4-C10
         property: context.constraints
         type: library
-        metric: rowCount
+        metric: count
         mustBeGreaterOrEqualTo: 1
         unit: rows
         description: >
@@ -610,7 +616,7 @@ levels:
       - id: L4-C11
         property: context.verifiedStatements
         type: library
-        metric: rowCount
+        metric: count
         mustBeGreaterOrEqualTo: 1
         unit: rows
         description: >
@@ -632,15 +638,15 @@ levels:
       - id: L5-C01
         property: schema[].properties[].description
         type: library
-        metric: nullValues
-        mustBe: 0
+        metric: count
+        mustBe: 100
         unit: percent
         description: 100% of properties have descriptions.
 
       - id: L5-C02
         property: schema[].properties[]
         type: library
-        metric: rowCount
+        metric: count
         mustBeGreaterOrEqualTo: 80
         unit: percent
         arguments:
@@ -650,10 +656,11 @@ levels:
       - id: L5-C03
         property: quality[].type
         type: library
-        metric: validValues
-        validValues:
-          - library
-          - sql
+        metric: count
+        arguments:
+          in:
+            - library
+            - sql
         mustBeGreaterOrEqualTo: 80
         unit: percent
         description: ">= 80% of quality rules are executable (library or sql)."
@@ -661,15 +668,15 @@ levels:
       - id: L5-C04
         property: schema[].properties[].required
         type: library
-        metric: nullValues
-        mustBe: 0
+        metric: count
+        mustBe: 100
         unit: percent
         description: 100% of properties have the required flag explicitly set.
 
       - id: L5-C05
         property: schema[].properties
         type: text
-        metric: rowCount
+        metric: count
         mustBe: 100
         unit: percent
         description: Every physical field has a corresponding contract property (100% coverage).
@@ -677,12 +684,12 @@ levels:
       - id: L5-C06
         property: quality[].dimension
         type: library
-        metric: rowCount
+        metric: count
         mustBeGreaterOrEqualTo: 3
         unit: rows
         arguments:
           distinct: true
-          validValues:
+          in:
             - accuracy
             - completeness
             - conformity
@@ -696,7 +703,7 @@ levels:
       - id: L5-C07
         property: slaProperties
         type: library
-        metric: rowCount
+        metric: count
         mustBeGreaterOrEqualTo: 3
         unit: rows
         description: SLA covers at least 3 operational aspects.
@@ -704,7 +711,7 @@ levels:
       - id: L5-C08
         property: pricing
         type: text
-        metric: rowCount
+        metric: count
         description: >
           Pricing populated if consumers are charged. Scores as met when
           pricing does not apply.
@@ -712,15 +719,15 @@ levels:
       - id: L5-C09
         property: tenant
         type: library
-        metric: nullValues
-        mustBe: 0
+        metric: count
+        mustBe: 1
         unit: rows
         description: Tenant / organization is identified (not null, not empty).
 
       - id: L5-C10
         property: schema[].properties[]
         type: library
-        metric: rowCount
+        metric: count
         mustBeGreaterOrEqualTo: 1
         unit: rows
         arguments:
@@ -736,7 +743,7 @@ levels:
       - id: L5-C11
         property: context.verifiedStatements
         type: library
-        metric: rowCount
+        metric: count
         mustBeGreaterOrEqualTo: 3
         unit: rows
         description: >
@@ -746,8 +753,8 @@ levels:
       - id: L5-C12
         property: context.verifiedStatements[].answer
         type: library
-        metric: nullValues
-        mustBeLessOrEqualTo: 50
+        metric: count
+        mustBeGreaterOrEqualTo: 50
         unit: percent
         description: >
           >= 50% of verified statements carry a curated answer that agents
@@ -756,8 +763,8 @@ levels:
       - id: L5-C13
         property: schema[].context
         type: library
-        metric: nullValues
-        mustBeLessOrEqualTo: 50
+        metric: count
+        mustBeGreaterOrEqualTo: 50
         unit: percent
         description: >
           >= 50% of schema objects carry their own context block, scoping

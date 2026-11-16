@@ -1,0 +1,22 @@
+# Copyright 2026 The Bitol Contributors
+# SPDX-License-Identifier: Apache-2.0
+#
+# POSITIVE TEST - this document MUST pass schema validation.
+# Rule: only kind, apiVersion, id, status and levels are required; name,
+# version, description and targetApplication may all be omitted.
+# See docs/fundamentals.md#field-descriptions.
+
+kind: MaturityModel
+apiVersion: v0.2.1
+id: 0a1b2c3d-0000-4000-8000-000000000001
+status: draft
+
+levels:
+  - level: 1
+    name: Basic
+    description: Minimum valid artifact.
+    criteria:
+      - id: L1-C01
+        property: kind
+        metric: valueOf
+        mustBe: DataContract

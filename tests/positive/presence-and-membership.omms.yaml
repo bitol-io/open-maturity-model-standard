@@ -1,0 +1,38 @@
+# Copyright 2026 The Bitol Contributors
+# SPDX-License-Identifier: Apache-2.0
+#
+# POSITIVE TEST - this document MUST pass schema validation.
+# Rule: presence is a count of 1 on a single value; membership is valueOf
+# with mustBeIn or mustNotBeIn.
+# See docs/criteria.md#metrics and #threshold-operators.
+
+kind: MaturityModel
+apiVersion: v0.2.1
+id: 0a1b2c3d-0000-4000-8000-000000000002
+name: presence-and-membership
+status: draft
+
+levels:
+  - level: 1
+    name: Basic
+    description: Minimum valid artifact.
+    criteria:
+      - id: L1-C01
+        property: version
+        type: library
+        metric: count
+        mustBe: 1
+        unit: rows
+        description: Version is present, whatever its value.
+      - id: L1-C02
+        property: status
+        type: library
+        metric: valueOf
+        mustBeIn: [proposed, draft, active, deprecated, retired]
+        description: Status is one of the listed values.
+      - id: L1-C03
+        property: status
+        type: library
+        metric: valueOf
+        mustNotBeIn: [retired]
+        description: Status is not retired.
