@@ -3,7 +3,7 @@
 #
 # NEGATIVE TEST - this document MUST fail schema validation.
 # Violation: `unit` is either `rows` or `percent`. `items` is a pre-OMMS
-# value that RFC-0037's migration notes retire. See docs/criteria.md#units.
+# value, retired in favour of `rows`. See docs/criteria.md#units.
 
 kind: MaturityModel
 apiVersion: v0.2.1

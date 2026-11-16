@@ -140,8 +140,7 @@ levels:
 | [`tests/negative/`](https://github.com/bitol-io/open-maturity-model-standard/tree/main/tests/negative) | Deliberately invalid documents the schema must reject. |
 | [Issues](https://github.com/bitol-io/open-maturity-model-standard/issues) | Questions the standard has not settled, tracked on GitHub. |
 
-OMMS is defined by [RFC-0037](https://github.com/bitol-io/tsc/blob/main/rfcs/0037-omms.md), filed with
-the Bitol TSC and not yet approved, and is part of the [Bitol](https://bitol.io) family of standards,
+OMMS is part of the [Bitol](https://bitol.io) family of standards,
 alongside [ODCS](https://github.com/bitol-io/open-data-contract-standard),
 [ODPS](https://github.com/bitol-io/open-data-product-standard) and
 [OORS](https://github.com/bitol-io/open-observability-results-standard).

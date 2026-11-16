@@ -23,9 +23,7 @@ checks read a single value in a document, which made models harder to write and 
 
 # v0.2.0 - DRAFT
 
-The first version of OMMS to exist as a repository. It is the schema-and-documentation form of
-[RFC-0037](https://github.com/bitol-io/tsc/blob/main/rfcs/0037-omms.md), filed with the TSC and not yet
-approved.
+The first version of OMMS to exist as a repository.
 
 * **Defines** the OMMS document: a `MaturityModel` with an envelope (`kind`, `apiVersion`, `id`, `name`, `version`, `status`, `description`, `tags`, `targetApplication`, `targetApiVersion`), `policies`, and `levels`. `kind`, `apiVersion`, `id`, `status` and `levels` are required; `name` and `version` are not, though a model meant to be used rather than read should supply both.
 * **Adds `policies`** as a first-class concept, evaluated before any level criteria. A policy is what expresses an organizational rule — most often a `caps` map from status to maximum achievable level, so a `deprecated` artifact cannot score above L2 however many higher criteria it satisfies. Policy IDs follow the suggested convention `POL-{X}{nn}`. See [Policies](docs/policies.md).
@@ -37,4 +35,4 @@ approved.
 * **Adds** the shared Bitol `customProperties` and `authoritativeDefinitions` structures, available on the model, a policy, a level and a criterion. See [Custom & Other Properties](docs/custom-other-properties.md).
 * **Ships four examples** — a `minimal` model, a `full` model exercising every construct in the standard, and the **ODCS** and **ODPS** maturity models at v2.0.0, in which **Level 4 is the AI-Ready level**. The two real models are the only maturity models in existence; they were moved here from the Bitol Workbench, where they had been living as private seeds.
 * **Adds** the negative-test fixtures under `tests/negative/` — invalid documents the schema must reject — wired into `scripts/validate-examples.sh`.
-* **Records** two questions RFC-0037 does not settle, found by validating the real models against the schema, (since moved to GitHub issues [#4](https://github.com/bitol-io/open-maturity-model-standard/issues/4) and [#5](https://github.com/bitol-io/open-maturity-model-standard/issues/5), and resolved in v0.2.1).
+* **Records** two open questions, found by validating the real models against the schema (since moved to GitHub issues [#4](https://github.com/bitol-io/open-maturity-model-standard/issues/4) and [#5](https://github.com/bitol-io/open-maturity-model-standard/issues/5), and resolved in v0.2.1).

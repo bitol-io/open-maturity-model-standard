@@ -55,4 +55,4 @@ pull request. File it in the [TSC repository](https://github.com/bitol-io/tsc) f
 [the RFC process](https://github.com/bitol-io/tsc/blob/main/rfcs/README.md). The schema here follows
 the approved RFCs; it does not lead them.
 
-Questions RFC-0037 has not settled are tracked as [GitHub issues](https://github.com/bitol-io/open-maturity-model-standard/issues).
+Open questions about the standard are tracked as [GitHub issues](https://github.com/bitol-io/open-maturity-model-standard/issues).

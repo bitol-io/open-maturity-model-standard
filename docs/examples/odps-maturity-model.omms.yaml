@@ -3,7 +3,7 @@
 
 # =============================================================================
 # ODPS Data Product Maturity Model — v2.1.0
-# Using Open Maturity Model Standard (OMMS) v0.2.1 (RFC-0037)
+# Using Open Maturity Model Standard (OMMS) v0.2.1
 # Targets ODPS v1.1.0 (RFC-0038 `context` block)
 # =============================================================================
 #

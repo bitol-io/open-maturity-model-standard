@@ -5,10 +5,6 @@ SPDX-License-Identifier: Apache-2.0
 
 # Articles & Other Resources
 
-## Specification
-
-* [RFC-0037 — Open Maturity Model Standard](https://github.com/bitol-io/tsc/blob/main/rfcs/0037-omms.md)
-
 ## Articles
 
 * 2026-02-24 - [Five Levels Between Chaos and (Almost) AI-Ready Data](https://dataintelligenceplatform.substack.com/p/five-levels-between-chaos-and-almost) — the article the shipped maturity models' five level names come from.

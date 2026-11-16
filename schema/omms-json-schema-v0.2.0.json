@@ -480,7 +480,7 @@
         },
         "validValues": {
           "type": "array",
-          "description": "Restrict to values in this list. Tolerated at criterion level for compatibility with existing models; RFC-0037 places `validValues` inside `arguments`. See https://github.com/bitol-io/open-maturity-model-standard/issues/5.",
+          "description": "Restrict to values in this list. Tolerated at criterion level for compatibility with existing models; the documented place is inside `arguments`. See https://github.com/bitol-io/open-maturity-model-standard/issues/5.",
           "items": {
             "type": "string"
           }

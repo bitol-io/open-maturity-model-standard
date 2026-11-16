@@ -38,8 +38,8 @@ customProperties:
 
 authoritativeDefinitions:
   - type: canonicalUrl
-    url: https://github.com/bitol-io/tsc/blob/main/rfcs/0037-omms.md
-    description: RFC-0037, which defines the syntax this model uses.
+    url: https://github.com/bitol-io/open-maturity-model-standard
+    description: OMMS, the standard whose syntax this model uses.
 
 policies:
   - id: POL-P01

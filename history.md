@@ -1,7 +1,7 @@
 # History
 
 ## Version 0.2.x
-OMMS becomes the formal consequence of [RFC-0037](https://github.com/bitol-io/tsc/blob/main/rfcs/0037-omms.md), filed with the Bitol TSC and not yet approved. This is the first version of the standard to exist outside the RFC: a JSON Schema, documentation, examples and validation CI.
+OMMS originated in [RFC-0037](https://github.com/bitol-io/tsc/blob/main/rfcs/0037-omms.md), filed with the Bitol TSC. Since then, the standard lives in this repository: a JSON Schema, documentation, examples and validation CI.
 
 The standard defines a YAML syntax for maturity models that evaluate Bitol artifacts — data contracts (ODCS) and data products (ODPS), and potentially others. Its criteria started from the ODCS data quality vocabulary and, from v0.2.1, use two metrics of their own (`valueOf` and `count`); it introduces `policies` as a first-class concept for the organizational rules that cap or constrain an evaluation.
 

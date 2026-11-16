@@ -53,9 +53,7 @@ Check out the [resources](resources.md) page.
 
 ## Contributing to the project
 
-Check out the [CONTRIBUTING](CONTRIBUTING.md) page. OMMS is defined by
-[RFC-0037](https://github.com/bitol-io/tsc/blob/main/rfcs/0037-omms.md), filed with the Bitol TSC and
-not yet approved.
+Check out the [CONTRIBUTING](CONTRIBUTING.md) page.
 
 ## License
 
