@@ -1,0 +1,56 @@
+# Copyright 2026 The Bitol Contributors
+# SPDX-License-Identifier: Apache-2.0
+#
+# POSITIVE TEST - this document MUST pass schema validation.
+# Rule: arguments shape the collection: having, anyOf, where, distinct and
+# relatesTo (bracket notation for a cross-artifact reference).
+# See docs/criteria.md#arguments and #cross-artifact-criteria.
+
+kind: MaturityModel
+apiVersion: v0.2.0
+id: 0a1b2c3d-0000-4000-8000-000000000008
+name: arguments
+status: draft
+
+levels:
+  - level: 1
+    name: Basic
+    description: Minimum valid artifact.
+    criteria:
+      - id: L1-P01
+        property: outputPorts[]
+        type: library
+        metric: rowCount
+        arguments:
+          having: [name, version]
+        mustBeGreaterOrEqualTo: 1
+        unit: rows
+      - id: L1-P02
+        property: team.members[]
+        type: library
+        metric: rowCount
+        arguments:
+          anyOf: [username, name]
+        mustBeGreaterOrEqualTo: 1
+        unit: rows
+      - id: L1-P03
+        property: team.members[].role
+        type: library
+        metric: rowCount
+        arguments:
+          distinct: true
+          where:
+            isNotNull: true
+        mustBeGreaterOrEqualTo: 2
+        unit: rows
+      - id: L1-P04
+        property: outputPorts[].contractId
+        type: library
+        metric: rowCount
+        arguments:
+          relatesTo: "[DataContract].status"
+          where:
+            field: status
+            in: [active]
+        mustBeGreaterOrEqualTo: 1
+        unit: rows

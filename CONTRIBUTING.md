@@ -30,7 +30,8 @@ force-pushed or deleted, and pull requests are merged with a **merge commit** â€
 squash or rebase merges.
 
 The `validate-examples` workflow runs on every pull request and verifies every example against the
-JSON schema, and asserts that the deliberately-invalid fixtures under `tests/negative/` are rejected.
+JSON schema, asserts that the minimal valid fixtures under `tests/positive/` are accepted, and asserts that
+the deliberately-invalid fixtures under `tests/negative/` are rejected.
 It is meant to be a **required check**, so that a pull request cannot be merged until it passes; it runs
 on every pull request but does not yet gate the merge. Treat a red run as blocking anyway.
 

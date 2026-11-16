@@ -1,0 +1,59 @@
+# Copyright 2026 The Bitol Contributors
+# SPDX-License-Identifier: Apache-2.0
+#
+# POSITIVE TEST - this document MUST pass schema validation.
+# Rule: customProperties and authoritativeDefinitions may appear on the
+# model, a policy, a level and a criterion.
+# See docs/custom-other-properties.md#where-they-may-appear.
+
+kind: MaturityModel
+apiVersion: v0.2.0
+id: 0a1b2c3d-0000-4000-8000-000000000009
+name: extensions-everywhere
+status: draft
+customProperties:
+  - property: exampleOf
+    value: OMMS v0.2.0
+authoritativeDefinitions:
+  - type: canonicalUrl
+    url: https://github.com/bitol-io/open-maturity-model-standard
+
+policies:
+  - id: POL-C01
+    property: status
+    metric: validValues
+    arguments:
+      caps:
+        retired: 0
+    customProperties:
+      - property: owner
+        value: governance
+        vendor: acme
+    authoritativeDefinitions:
+      - type: businessDefinition
+        url: https://example.com/policies/status-cap
+
+levels:
+  - level: 1
+    name: Basic
+    description: Minimum valid artifact.
+    customProperties:
+      - id: cp-level-1
+        property: displayColor
+        value: grey
+    authoritativeDefinitions:
+      - type: tutorial
+        url: https://example.com/levels/basic
+    criteria:
+      - id: L1-C01
+        property: kind
+        metric: validValues
+        mustBe: DataContract
+        tags: [structural]
+        customProperties:
+          - property: effort
+            value: 1
+            description: Relative cost of meeting this criterion.
+        authoritativeDefinitions:
+          - type: implementation
+            url: https://example.com/checks/kind

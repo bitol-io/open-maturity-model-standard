@@ -1,0 +1,23 @@
+# Copyright 2026 The Bitol Contributors
+# SPDX-License-Identifier: Apache-2.0
+#
+# POSITIVE TEST - this document MUST pass schema validation.
+# Rule: a type: text criterion may omit metric; it documents an expectation
+# the evaluator does not resolve, and auto-passes.
+# See docs/criteria.md#library-and-text.
+
+kind: MaturityModel
+apiVersion: v0.2.0
+id: 0a1b2c3d-0000-4000-8000-000000000006
+name: text-without-metric
+status: draft
+
+levels:
+  - level: 1
+    name: Basic
+    description: Minimum valid artifact.
+    criteria:
+      - id: L1-C01
+        property: jsonSchemaValidation
+        type: text
+        description: YAML passes ODCS JSON Schema validation with 0 errors.

@@ -136,6 +136,7 @@ levels:
 | [`schema/`](https://github.com/bitol-io/open-maturity-model-standard/tree/main/schema) | The versioned JSON Schemas. Files using the `.omms.yaml` extension are auto-detected as OMMS. |
 | [`docs/`](https://github.com/bitol-io/open-maturity-model-standard/tree/main/docs) | This documentation. |
 | [`docs/examples/`](examples/README.md) | Complete maturity models. |
+| [`tests/positive/`](https://github.com/bitol-io/open-maturity-model-standard/tree/main/tests/positive) | Minimal valid documents, one per permitted rule, the schema must accept. |
 | [`tests/negative/`](https://github.com/bitol-io/open-maturity-model-standard/tree/main/tests/negative) | Deliberately invalid documents the schema must reject. |
 | [Issues](https://github.com/bitol-io/open-maturity-model-standard/issues) | Questions the standard has not settled, tracked on GitHub. |
 

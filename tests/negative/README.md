@@ -9,7 +9,7 @@ Each file here is a **deliberately invalid** OMMS document. Every one of them **
 [`schema/omms-json-schema-v0.2.0.json`](../../schema/omms-json-schema-v0.2.0.json) — a run in which any
 of them validates is a failure.
 
-They guard the rules the positive examples cannot: that the schema actually enforces what the standard
+Their counterpart is the [positive tests](../positive/README.md). They guard the rules the positive examples cannot: that the schema actually enforces what the standard
 says. The header comment in each file names the specific violation.
 
 | Fixture | Violation |

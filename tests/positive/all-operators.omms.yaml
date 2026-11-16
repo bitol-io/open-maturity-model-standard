@@ -1,0 +1,67 @@
+# Copyright 2026 The Bitol Contributors
+# SPDX-License-Identifier: Apache-2.0
+#
+# POSITIVE TEST - this document MUST pass schema validation.
+# Rule: each of the eight threshold operators is accepted, with a number
+# (or a [min, max] pair for the range operators).
+# See docs/criteria.md#threshold-operators.
+
+kind: MaturityModel
+apiVersion: v0.2.0
+id: 0a1b2c3d-0000-4000-8000-000000000004
+name: all-operators
+status: draft
+
+levels:
+  - level: 1
+    name: Basic
+    description: Minimum valid artifact.
+    criteria:
+      - id: L1-C01
+        property: schema[]
+        type: library
+        metric: rowCount
+        mustBe: 1
+        unit: rows
+      - id: L1-C02
+        property: schema[]
+        type: library
+        metric: rowCount
+        mustNotBe: 0
+        unit: rows
+      - id: L1-C03
+        property: schema[]
+        type: library
+        metric: rowCount
+        mustBeGreaterThan: 0
+        unit: rows
+      - id: L1-C04
+        property: schema[]
+        type: library
+        metric: rowCount
+        mustBeGreaterOrEqualTo: 1
+        unit: rows
+      - id: L1-C05
+        property: schema[]
+        type: library
+        metric: rowCount
+        mustBeLessThan: 10
+        unit: rows
+      - id: L1-C06
+        property: schema[]
+        type: library
+        metric: rowCount
+        mustBeLessOrEqualTo: 10
+        unit: rows
+      - id: L1-C07
+        property: schema[]
+        type: library
+        metric: rowCount
+        mustBeBetween: [1, 10]
+        unit: rows
+      - id: L1-C08
+        property: schema[]
+        type: library
+        metric: rowCount
+        mustNotBeBetween: [100, 200]
+        unit: rows

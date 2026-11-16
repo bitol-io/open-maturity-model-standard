@@ -4,9 +4,9 @@
 name: validate-examples
 on:
   pull_request:
-    branches: ["*"]
+    branches: ["**"]
   push:
-    branches: ["*"]
+    branches: ["**"]
 
 jobs:
   validate:

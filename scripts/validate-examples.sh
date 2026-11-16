@@ -82,6 +82,26 @@ for file in $yaml_files; do
 done
 
 echo ""
+echo -e "${YELLOW}Validating positive-test fixtures (these MUST be accepted)${NC}"
+
+positive_dir="${project_root}/tests/positive"
+
+if [ -d "$positive_dir" ]; then
+    positive_files=$(find "$positive_dir" \( -name "*.yaml" -o -name "*.yml" -o -name "*.json" \) 2>/dev/null || true)
+
+    for file in $positive_files; do
+        if ajv validate --spec=draft2019 --all-errors -c ajv-formats -s "$schema_file" -d "$file"; then
+            echo -e "${GREEN}Correctly accepted, file=$(basename "$file")${NC}"
+        else
+            echo -e "${RED}UNEXPECTEDLY INVALID (schema too strict), file=$(basename "$file")${NC}"
+            num_failed_validation=$((num_failed_validation+1))
+        fi
+    done
+else
+    echo -e "${YELLOW}No positive tests found at $positive_dir${NC}"
+fi
+
+echo ""
 echo -e "${YELLOW}Validating negative-test fixtures (these MUST be rejected)${NC}"
 
 negative_dir="${project_root}/tests/negative"

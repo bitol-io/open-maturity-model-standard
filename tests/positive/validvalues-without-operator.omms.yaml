@@ -1,0 +1,31 @@
+# Copyright 2026 The Bitol Contributors
+# SPDX-License-Identifier: Apache-2.0
+#
+# POSITIVE TEST - this document MUST pass schema validation.
+# Rule: the threshold operator is optional for validValues. Without one, the
+# criterion is a presence check, optionally against a validValues list.
+# See docs/criteria.md#criteria-without-an-operator (issue #4).
+
+kind: MaturityModel
+apiVersion: v0.2.0
+id: 0a1b2c3d-0000-4000-8000-000000000002
+name: validvalues-without-operator
+status: draft
+
+levels:
+  - level: 1
+    name: Basic
+    description: Minimum valid artifact.
+    criteria:
+      - id: L1-C01
+        property: version
+        type: library
+        metric: validValues
+        description: Version is present, whatever its value.
+      - id: L1-C02
+        property: status
+        type: library
+        metric: validValues
+        arguments:
+          validValues: [proposed, draft, active, deprecated, retired]
+        description: Status is present and is one of the listed values.

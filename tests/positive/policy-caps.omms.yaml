@@ -1,0 +1,37 @@
+# Copyright 2026 The Bitol Contributors
+# SPDX-License-Identifier: Apache-2.0
+#
+# POSITIVE TEST - this document MUST pass schema validation.
+# Rule: a policy may cap the achievable level by status with the caps
+# argument, and policies sit before levels.
+# See docs/policies.md#the-caps-argument.
+
+kind: MaturityModel
+apiVersion: v0.2.0
+id: 0a1b2c3d-0000-4000-8000-000000000007
+name: policy-caps
+status: draft
+
+policies:
+  - id: POL-C01
+    name: statusCap
+    property: status
+    type: library
+    metric: validValues
+    arguments:
+      caps:
+        retired: 0
+        deprecated: 2
+        active: 5
+    description: Status determines the maximum achievable level.
+
+levels:
+  - level: 1
+    name: Basic
+    description: Minimum valid artifact.
+    criteria:
+      - id: L1-C01
+        property: kind
+        type: library
+        metric: validValues
+        mustBe: DataContract
