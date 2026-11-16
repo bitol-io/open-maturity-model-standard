@@ -15,7 +15,8 @@ being evaluated, a `metric` to compute over it, optional `arguments` to shape wh
 a threshold operator that says what the measured value must satisfy.
 
 Criteria use the ODCS data quality vocabulary — the same `metric`, `arguments`, operators and `unit` a
-data quality rule uses. OMMS introduces no new metrics.
+data quality rule uses. OMMS adds one metric ODCS does not have: `validValues`, which reads a value
+instead of counting items. See [Metrics](#metrics).
 
 [Back to TOC](README.md)
 
@@ -78,14 +79,55 @@ was `L4-C03` to `L3-C13`, so never compare two model versions by ID.
 
 ## Metrics
 
-OMMS reuses the ODCS library metrics and introduces none of its own.
+OMMS has four metrics. Three come from the ODCS library metrics and **count** items. The fourth,
+`validValues`, is specific to OMMS and **reads a value**.
 
-| Metric          | Description                          |
-| --------------- | ------------------------------------ |
-| `rowCount`      | Counts items in a collection         |
-| `nullValues`    | Counts null or empty values          |
-| `invalidValues` | Counts values not in an allowed set  |
-| `validValues`   | Checks values against an allowed set |
+| Metric          | Returns | Origin | Description                                                     |
+| --------------- | ------- | ------ | --------------------------------------------------------------- |
+| `rowCount`      | A count | ODCS   | Counts items in a collection.                                   |
+| `nullValues`    | A count | ODCS   | Counts null or empty values.                                    |
+| `invalidValues` | A count | ODCS   | Counts values not in an allowed set.                            |
+| `validValues`   | A value | OMMS   | Reads the value at `property` and compares it to the threshold. |
+
+### Counting metrics and `validValues`
+
+A counting metric returns a number of items, so its threshold is a number and `unit` says whether that
+number is a count (`rows`) or a ratio (`percent`). That suits a collection such as
+`schema[].properties[].description`.
+
+Most OMMS checks look at a single value in a document instead: "is `kind` `DataContract`?", "is
+`apiVersion` at least `v3.2.0`?". `validValues` answers those directly. It returns the value at
+`property`, and the threshold operator compares that value, not a count:
+
+```yaml
+- id: L1-C01
+  property: kind
+  type: library
+  metric: validValues
+  mustBe: DataContract
+  description: kind must equal DataContract.
+```
+
+This is also what lets a model gate on a version, with `mustBeGreaterOrEqualTo: v3.2.0` or
+`mustBe: latest` (see [Threshold operators](#threshold-operators)): a version string can only be
+compared to a value, never to a count. A `validValues` criterion carries no `unit`.
+
+When the value must be one of several, list them in the `validValues` argument:
+
+```yaml
+- id: L3-C02
+  property: status
+  type: library
+  metric: validValues
+  arguments:
+    validValues: [active, deprecated]
+  description: The contract is active or deprecated.
+```
+
+> **Note:** ODCS v3.0.0 used `validValues` as a rule name. Since ODCS v3.1.0 it is only an argument of
+> the `invalidValues` metric, which counts the values outside the list. OMMS keeps `validValues` as a
+> metric on purpose: `metric: invalidValues` with `mustBe: 0` expresses the same membership test, but
+> it cannot express a version floor.
 
 The set is closed: the schema accepts these four and no others. A model that needs a different
 measurement expresses it with the existing metrics plus [arguments](#arguments) — `distinct: true` on
