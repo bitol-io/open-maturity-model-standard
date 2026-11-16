@@ -1,7 +1,7 @@
 # Copyright 2026 The Bitol Contributors
 # SPDX-License-Identifier: Apache-2.0
 
-# Every OMMS v0.2.1 construct in one model: all ten threshold operators, both
+# Every OMMS v0.2.2 construct in one model: all ten threshold operators, both
 # metrics, both units, every argument, `type: text`, and the shared
 # custom-property and authoritative-definition structures at several levels.
 #
@@ -10,14 +10,14 @@
 # construct it demonstrates.
 
 kind: MaturityModel
-apiVersion: v0.2.1
+apiVersion: v0.2.2
 id: 5b7e1d94-2c63-4f18-9a7e-3d5b8c1f6a20
 name: full-kitchen-sink-maturity-model
 version: 0.1.0
 status: draft
 description:
   purpose: >
-    Illustrative maturity model exercising every construct in OMMS v0.2.1.
+    Illustrative maturity model exercising every construct in OMMS v0.2.2.
   limitations: >
     Not a maturity model to adopt. Several thresholds are arbitrary, chosen
     to demonstrate an operator rather than to measure anything.
@@ -33,7 +33,7 @@ targetApiVersion: v1.1.0
 
 customProperties:
   - property: exampleOf
-    value: OMMS v0.2.1
+    value: OMMS v0.2.2
     description: Records that this model is illustrative only.
 
 authoritativeDefinitions:

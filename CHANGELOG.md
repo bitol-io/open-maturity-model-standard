@@ -6,7 +6,13 @@ image: "https://raw.githubusercontent.com/bitol-io/artwork/main/horizontal/color
 
 This document tracks the history and evolution of the **Open Maturity Model Standard**.
 
-# v0.2.1 - DRAFT
+# v0.2.2 - DRAFT
+
+Work in progress.
+
+* Default `apiVersion` raised to `v0.2.2`. The v0.2.1 schema is unchanged.
+
+# v0.2.1 - 2026-11-16 - DRAFT
 
 Breaking changes to the criteria syntax, allowed before v1.0.0. Criteria no longer follow the ODCS data
 quality vocabulary: it was a good starting point, but its metrics count rows of data, while most OMMS
@@ -21,7 +27,7 @@ checks read a single value in a document, which made models harder to write and 
 * **Adds** positive-test fixtures under `tests/positive/`, one minimal valid document per permitted rule, and negative-test fixtures for the new rules (old metric name, missing operator, two operators, `valueOf` with a `unit`, `mustBeIn` with `count`, a list on the criterion).
 * **Tracks** open questions as [GitHub issues](https://github.com/bitol-io/open-maturity-model-standard/issues) instead of `issues.md`.
 
-# v0.2.0 - DRAFT
+# v0.2.0 - 2026-10-16 - DRAFT
 
 The first version of OMMS to exist as a repository.
 

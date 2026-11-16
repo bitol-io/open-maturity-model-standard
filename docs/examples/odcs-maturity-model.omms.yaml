@@ -3,7 +3,7 @@
 
 # =============================================================================
 # ODCS Data Contract Maturity Model — v2.1.0
-# Using Open Maturity Model Standard (OMMS) v0.2.1
+# Using Open Maturity Model Standard (OMMS) v0.2.2
 # Targets ODCS v3.2.0 (RFC-0038 `context` block)
 # =============================================================================
 #
@@ -35,7 +35,7 @@
 #   between v1.0.0 and v2.0.0 by id.
 # =============================================================================
 kind: MaturityModel
-apiVersion: v0.2.1
+apiVersion: v0.2.2
 id: 7a2f9c13-4e81-4b6a-a3d2-8f1e5d097b4c
 name: odcs-data-contract-maturity-model
 version: 2.1.0

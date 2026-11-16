@@ -20,8 +20,8 @@
     },
     "apiVersion": {
       "type": "string",
-      "default": "v0.2.1",
-      "description": "Version of the OMMS schema used. Indicates the version of the standard, e.g., `v0.2.1`."
+      "default": "v0.2.2",
+      "description": "Version of the OMMS schema used. Indicates the version of the standard, e.g., `v0.2.2`."
     },
     "id": {
       "type": "string",

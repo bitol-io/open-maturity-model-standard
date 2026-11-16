@@ -31,6 +31,7 @@ update the following section:
       ...,
       "versions": {
         "<new_version>": "https://github.com/bitol-io/open-maturity-model-standard/blob/main/schema/omms-json-schema-<new_version>.json",
+        "v0.2.2": "https://github.com/bitol-io/open-maturity-model-standard/blob/main/schema/omms-json-schema-v0.2.2.json",
         "v0.2.1": "https://github.com/bitol-io/open-maturity-model-standard/blob/main/schema/omms-json-schema-v0.2.1.json",
         "v0.2.0": "https://github.com/bitol-io/open-maturity-model-standard/blob/main/schema/omms-json-schema-v0.2.0.json"
       }

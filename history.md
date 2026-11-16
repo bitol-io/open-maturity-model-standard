@@ -7,7 +7,7 @@ The standard defines a YAML syntax for maturity models that evaluate Bitol artif
 
 Two maturity models ship with it — one for ODCS contracts and one for ODPS products — both at v2.1.0, with five levels each and **Level 4 as the AI-Ready level**: the point at which a machine consumer, a quality engine or an AI agent, can test the artifact and use it safely. They are the only maturity models in existence; before this release they lived as private seeds inside the Bitol Workbench.
 
-OMMS v0.2.1 is currently in development.
+OMMS v0.2.2 is currently in development.
 
 ## Origins
 OMMS was created within [Bitol](https://bitol.io), part of the [Linux Foundation AI & Data](https://lfaidata.foundation/), alongside its sibling standards ODCS (Open Data Contract Standard), ODPS (Open Data Product Standard) and OORS (Open Observability Results Standard). It follows the same lightweight, human-readable philosophy, and it is the standard that lets the others be scored rather than only written: the maturity models in this repository evaluate contracts and products the way OORS reports on them.

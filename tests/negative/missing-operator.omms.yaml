@@ -6,7 +6,7 @@
 # operator; here there is none. See docs/criteria.md#threshold-operators.
 
 kind: MaturityModel
-apiVersion: v0.2.1
+apiVersion: v0.2.2
 id: 6f7a8b9c-0d1e-4f2a-8b3c-4d5e6f7a8b02
 name: missing-operator
 status: draft

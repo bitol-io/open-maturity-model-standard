@@ -7,7 +7,7 @@
 # See docs/criteria.md#threshold-operators.
 
 kind: MaturityModel
-apiVersion: v0.2.1
+apiVersion: v0.2.2
 id: 6f7a8b9c-0d1e-4f60-b17c-8d9e0f1a2b3c
 name: invalid-operator
 status: draft

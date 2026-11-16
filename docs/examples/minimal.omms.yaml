@@ -2,13 +2,13 @@
 # SPDX-License-Identifier: Apache-2.0
 
 kind: MaturityModel
-apiVersion: v0.2.1
+apiVersion: v0.2.2
 id: 9f3a2c17-8b4d-4e6a-a1f5-7d9c3e8b2a4f
 name: example-maturity-model
 version: 0.1.0
 status: draft
 description:
-  purpose: Example maturity model demonstrating OMMS v0.2.1 syntax.
+  purpose: Example maturity model demonstrating OMMS v0.2.2 syntax.
 tags:
   - example
 targetApplication: ODCS

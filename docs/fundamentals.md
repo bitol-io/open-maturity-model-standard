@@ -24,7 +24,7 @@ and at least one level.
 
 ```yaml
 kind: MaturityModel
-apiVersion: v0.2.1
+apiVersion: v0.2.2
 id: 9f3a2c17-8b4d-4e6a-a1f5-7d9c3e8b2a4f
 status: draft
 levels:
@@ -47,7 +47,7 @@ not cover, and how to apply it.
 
 ```yaml
 kind: MaturityModel
-apiVersion: v0.2.1
+apiVersion: v0.2.2
 id: 9f3a2c17-8b4d-4e6a-a1f5-7d9c3e8b2a4f
 name: odcs-data-contract-maturity-model
 version: 2.0.0
@@ -75,7 +75,7 @@ targetApiVersion: v3.2.0
 | Key                        | Type    | UX label              | Required | Description                                                                                                                                                              | Example                                   |
 | -------------------------- | ------- | --------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------- |
 | `kind`                     | string  | Kind                  | Yes      | The type of OMMS object. For OMMS, always `MaturityModel`.                                                                                                               | `MaturityModel`                           |
-| `apiVersion`               | string  | API Version           | Yes      | Version of the OMMS standard the document uses.                                                                                                                           | `v0.2.1`                                  |
+| `apiVersion`               | string  | API Version           | Yes      | Version of the OMMS standard the document uses.                                                                                                                           | `v0.2.2`                                  |
 | `id`                       | string  | ID                    | Yes      | A unique identifier for this maturity model (a UUID is recommended).                                                                                                     | `9f3a2c17-8b4d-4e6a-…`                    |
 | `name`                     | string  | Name                  | No       | Name of the maturity model.                                                                                                                                              | `odcs-data-contract-maturity-model`       |
 | `version`                  | string  | Version               | No       | Version of the **model itself** (SemVer), independent of `apiVersion`.                                                                                                    | `2.0.0`                                   |

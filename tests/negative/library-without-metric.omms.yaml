@@ -6,7 +6,7 @@
 # must carry a `metric`. See docs/criteria.md#field-descriptions.
 
 kind: MaturityModel
-apiVersion: v0.2.1
+apiVersion: v0.2.2
 id: 4d5e6f7a-8b9c-4d4e-bf5a-6b7c8d9e0f1a
 name: library-without-metric
 status: draft
